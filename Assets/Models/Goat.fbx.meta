@@ -1,0 +1,263 @@
+fileFormatVersion: 2
+guid: da06d0e7cc7a5428eac7db074905e197
+timeCreated: 1485011334
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: pCube19
+    100004: pCube20
+    100006: polySurface11
+    100008: polySurface12
+    100010: polySurface26
+    100012: polySurface27
+    100014: polySurface29
+    100016: polySurface30
+    100018: polySurface31
+    100020: pSphere7
+    100022: pSphere8
+    100024: pSphere9
+    100026: Arms
+    100028: Body
+    100030: Body 1
+    100032: Head
+    100034: HeadTip
+    100036: Jaw
+    100038: JawEnd
+    100040: LeftEye
+    100042: RightEye
+    100044: Skeleton
+    400000: //RootNode
+    400002: pCube19
+    400004: pCube20
+    400006: polySurface11
+    400008: polySurface12
+    400010: polySurface26
+    400012: polySurface27
+    400014: polySurface29
+    400016: polySurface30
+    400018: polySurface31
+    400020: pSphere7
+    400022: pSphere8
+    400024: pSphere9
+    400026: Arms
+    400028: Body
+    400030: Body 1
+    400032: Head
+    400034: HeadTip
+    400036: Jaw
+    400038: JawEnd
+    400040: LeftEye
+    400042: RightEye
+    400044: Skeleton
+    2300000: pCube19
+    2300002: pCube20
+    2300004: polySurface11
+    2300006: polySurface12
+    2300008: polySurface26
+    2300010: polySurface27
+    2300012: polySurface29
+    2300014: polySurface30
+    2300016: polySurface31
+    2300018: pSphere7
+    2300020: pSphere8
+    2300022: pSphere9
+    2300024: Arms
+    2300026: Body
+    3300000: pCube19
+    3300002: pCube20
+    3300004: polySurface11
+    3300006: polySurface12
+    3300008: polySurface26
+    3300010: polySurface27
+    3300012: polySurface29
+    3300014: polySurface30
+    3300016: polySurface31
+    3300018: pSphere7
+    3300020: pSphere8
+    3300022: pSphere9
+    3300024: Arms
+    3300026: Body
+    4300000: pSphere7
+    4300002: pSphere8
+    4300004: pSphere9
+    4300006: pCube19
+    4300008: pCube20
+    4300010: polySurface11
+    4300012: polySurface12
+    4300014: polySurface26
+    4300016: polySurface27
+    4300018: polySurface29
+    4300020: polySurface30
+    4300022: polySurface31
+    4300024: Arms
+    4300026: Body
+    7400000: Idle
+    7400002: Scream
+    9500000: //RootNode
+    13700000: Body
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 3
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Idle
+      takeName: Take 001
+      firstFrame: 1
+      lastFrame: 100
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Body
+        weight: 1
+      - path: Skeleton
+        weight: 1
+      - path: Skeleton/Arms
+        weight: 1
+      - path: Skeleton/Body 1
+        weight: 1
+      - path: Skeleton/Body 1/Head
+        weight: 1
+      - path: Skeleton/Body 1/Head/HeadTip
+        weight: 1
+      - path: Skeleton/Body 1/Head/Jaw
+        weight: 1
+      - path: Skeleton/Body 1/Head/Jaw/JawEnd
+        weight: 1
+      - path: Skeleton/Body 1/Head/LeftEye
+        weight: 1
+      - path: Skeleton/Body 1/Head/RightEye
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0.9
+    - serializedVersion: 16
+      name: Scream
+      takeName: Take 001
+      firstFrame: 105
+      lastFrame: 125
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Body
+        weight: 1
+      - path: Skeleton
+        weight: 1
+      - path: Skeleton/Arms
+        weight: 1
+      - path: Skeleton/Body 1
+        weight: 1
+      - path: Skeleton/Body 1/Head
+        weight: 1
+      - path: Skeleton/Body 1/Head/HeadTip
+        weight: 1
+      - path: Skeleton/Body 1/Head/Jaw
+        weight: 1
+      - path: Skeleton/Body 1/Head/Jaw/JawEnd
+        weight: 1
+      - path: Skeleton/Body 1/Head/LeftEye
+        weight: 1
+      - path: Skeleton/Body 1/Head/RightEye
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0.9
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

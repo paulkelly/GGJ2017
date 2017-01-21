@@ -7,6 +7,9 @@ public class ManGoat : MonoBehaviour
     public Transform CameraFollowTarget;
     public ForwardRaycast ForwardRay;
 
+    public Animator ManAnimator;
+    public Animator GoatAnimator;
+
     public bool ManYelling;
     public bool GoatYelling;
 
@@ -19,6 +22,7 @@ public class ManGoat : MonoBehaviour
     public float MinForce = 80000f;
     public float MaxForce = 200000f;
 
+    private const float AnimationDampTime = 0.1f;
     private const float AccelerationDampTime = 0.02f;
     private const float CameraTargetDampTimeOut = 10f;
     private const float CameraTargetDampTimeIn = 2f;
@@ -30,6 +34,12 @@ public class ManGoat : MonoBehaviour
     private float _cameraTarget;
     private float _cameraDampVelocity;
 
+    private float _manAnimationAcc;
+    private float _manAnimationDampVelocity;
+
+    private float _goatAnimationAcc;
+    private float _goatAnimationDampVelocity;
+
     private float _manAcceleration;
     private float _manAccDampVelocity;
 
@@ -39,6 +49,30 @@ public class ManGoat : MonoBehaviour
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
+    }
+
+    private void Update()
+    {
+        if (ManYelling)
+        {
+            _manAnimationAcc = Mathf.SmoothDamp(_manAnimationAcc, ManVolume, ref _manAnimationDampVelocity, AnimationDampTime, 1000, Time.deltaTime);
+        }
+        else
+        {
+            _manAnimationAcc = Mathf.SmoothDamp(_manAnimationAcc, 0, ref _manAnimationDampVelocity, AnimationDampTime, 1000, Time.deltaTime);
+        }
+
+        if (GoatYelling)
+        {
+            _goatAnimationAcc = Mathf.SmoothDamp(_goatAnimationAcc, GoatVolume, ref _goatAnimationDampVelocity, AnimationDampTime, 100, Time.deltaTime);
+        }
+        else
+        {
+            _goatAnimationAcc = Mathf.SmoothDamp(_goatAnimationAcc, 0, ref _goatAnimationDampVelocity, AnimationDampTime, 100, Time.deltaTime);
+        }
+
+        ManAnimator.SetFloat("Scream", _manAnimationAcc);
+        GoatAnimator.SetFloat("Scream", _goatAnimationAcc);
     }
 
     private void FixedUpdate()
@@ -79,7 +113,8 @@ public class ManGoat : MonoBehaviour
         Vector3 torque = (_rigidbody.rotation * Vector3.up) * torqueAmount * Time.fixedDeltaTime;
         _rigidbody.AddTorque(torque);
 
-        float maxCameraDist = CameraMaxDistance;
+        float maxCameraDist = CameraMaxDistance + _rigidbody.velocity.magnitude;
+
         if(ForwardRay.HasHit)
         {
             maxCameraDist = Mathf.Min(Vector3.Distance(ForwardRay.HitPoint, ForwardRay.transform.position), CameraMaxDistance);
