@@ -239,7 +239,10 @@ i++;
 
 //set selected device from isnpector as device number. (to find the device).
 if(i>=1 && !useDefaultMic){
-selectedDevice= Microphone.devices[InputDevice];
+    if(Microphone.devices.Length > InputDevice)
+    {
+        selectedDevice= Microphone.devices[InputDevice];
+    }
 }
 
 //set the default device if enabled

@@ -14,16 +14,11 @@ public class VolumePip : MonoBehaviour
     public void SetColor(Color c)
     {
         _image.color = c;
-        Hide();
+        SetAlpha(0);
     }
 
-    public void Show()
+    public void SetAlpha(float a)
     {
-        _image.color = new Color(_image.color.r, _image.color.g, _image.color.b, 1);
-    }
-
-    public void Hide()
-    {
-        _image.color = new Color(_image.color.r, _image.color.g, _image.color.b, 0);
+        _image.color = new Color(_image.color.r, _image.color.g, _image.color.b, a);
     }
 }

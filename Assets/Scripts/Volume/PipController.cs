@@ -57,11 +57,39 @@ public class PipController : MonoBehaviour
             bool on = ((float)i / (float)_pips.Count) >= (1 - Volume);
             if(on)
             {
-                _pips[i].Show();
+                if (GlobalMics.Instance.MicControlled)
+                {
+                    _pips[i].SetAlpha(1);
+                }
+                else
+                {
+                    if (Player == 1)
+                    {
+                        if(GlobalMics.Instance.Player1Yelling)
+                        {
+                            _pips[i].SetAlpha(1);
+                        }
+                        else
+                        {
+                            _pips[i].SetAlpha(0.5f);
+                        }
+                    }
+                    else
+                    {
+                        if (GlobalMics.Instance.Player2Yelling)
+                        {
+                            _pips[i].SetAlpha(1);
+                        }
+                        else
+                        {
+                            _pips[i].SetAlpha(0.5f);
+                        }
+                    }
+                }
             }
             else
             {
-                _pips[i].Hide();
+                _pips[i].SetAlpha(0);
             }
         }
     }
