@@ -10,6 +10,9 @@ public class ManGoat : MonoBehaviour
     public Animator ManAnimator;
     public Animator GoatAnimator;
 
+    public ParticleSystem ManParticles;
+    public ParticleSystem GoatParticles;
+
     public bool ManYelling;
     public bool GoatYelling;
 
@@ -73,6 +76,9 @@ public class ManGoat : MonoBehaviour
 
         ManAnimator.SetFloat("Scream", _manAnimationAcc);
         GoatAnimator.SetFloat("Scream", _goatAnimationAcc);
+
+        ManParticles.emissionRate = _manAnimationAcc*15;
+        GoatParticles.emissionRate = _goatAnimationAcc*15;
     }
 
     private void FixedUpdate()
