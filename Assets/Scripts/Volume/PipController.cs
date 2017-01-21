@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PipController : MonoBehaviour
 {
+    public int Player = 1;
+
     [Range(0, 1)]
     public float Volume;
 
@@ -40,6 +42,15 @@ public class PipController : MonoBehaviour
 
     private void Update()
     {
+        if (Player == 1)
+        {
+            Volume = GlobalMics.Instance.Player1Volume;
+        }
+        else
+        {
+            Volume = GlobalMics.Instance.Player2Volume;
+        }
+
         for (int i = 0; i < _pips.Count; i++)
         {
             //1-Volume because scripts are in back to front order
