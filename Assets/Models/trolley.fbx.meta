@@ -1,0 +1,143 @@
+fileFormatVersion: 2
+guid: 5344c49e7b38d402b807f66f297d4b15
+timeCreated: 1485000809
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: basket
+    100002: FL_Rim
+    100004: FL_Rubber
+    100006: FR_Rim
+    100008: FR_Rubber
+    100010: handle
+    100012: LF_Wheel
+    100014: LR_Rubber
+    100016: LR_Wheel
+    100018: RF_Wheel
+    100020: RL_Rim
+    100022: RR_Rim
+    100024: RR_Rubber
+    100026: RR_Wheel
+    100028: //RootNode
+    400000: basket
+    400002: FL_Rim
+    400004: FL_Rubber
+    400006: FR_Rim
+    400008: FR_Rubber
+    400010: handle
+    400012: LF_Wheel
+    400014: LR_Rubber
+    400016: LR_Wheel
+    400018: RF_Wheel
+    400020: RL_Rim
+    400022: RR_Rim
+    400024: RR_Rubber
+    400026: RR_Wheel
+    400028: //RootNode
+    2300000: basket
+    2300002: FL_Rim
+    2300004: FL_Rubber
+    2300006: FR_Rim
+    2300008: FR_Rubber
+    2300010: handle
+    2300012: LF_Wheel
+    2300014: LR_Rubber
+    2300016: LR_Wheel
+    2300018: RF_Wheel
+    2300020: RL_Rim
+    2300022: RR_Rim
+    2300024: RR_Rubber
+    2300026: RR_Wheel
+    3300000: basket
+    3300002: FL_Rim
+    3300004: FL_Rubber
+    3300006: FR_Rim
+    3300008: FR_Rubber
+    3300010: handle
+    3300012: LF_Wheel
+    3300014: LR_Rubber
+    3300016: LR_Wheel
+    3300018: RF_Wheel
+    3300020: RL_Rim
+    3300022: RR_Rim
+    3300024: RR_Rubber
+    3300026: RR_Wheel
+    4300000: handle
+    4300002: basket
+    4300004: RF_Wheel
+    4300006: FR_Rubber
+    4300008: FR_Rim
+    4300010: RR_Wheel
+    4300012: RR_Rubber
+    4300014: RR_Rim
+    4300016: LF_Wheel
+    4300018: FL_Rubber
+    4300020: FL_Rim
+    4300022: LR_Wheel
+    4300024: LR_Rubber
+    4300026: RL_Rim
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
