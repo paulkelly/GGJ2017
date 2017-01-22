@@ -49,6 +49,11 @@ public class ManGoat : MonoBehaviour
     private float _goatAcceleration;
     private float _goatAccDampVelocity;
 
+    private bool _started;
+    private float _startTimer;
+    private float _startTime = 0.1f;
+    private bool _dead;
+
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
@@ -56,6 +61,20 @@ public class ManGoat : MonoBehaviour
 
     private void Update()
     {
+        if(!_started)
+        {
+            if (GlobalMics.Instance.GameStarted)
+            {
+                _startTimer += Time.deltaTime;
+                if (_startTimer > _startTime)
+                {
+                    _started = true;
+                }
+            }
+
+            return;
+        }
+
         if (ManYelling)
         {
             _manAnimationAcc = Mathf.SmoothDamp(_manAnimationAcc, ManVolume, ref _manAnimationDampVelocity, AnimationDampTime, 1000, Time.deltaTime);
@@ -83,7 +102,41 @@ public class ManGoat : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(ManYelling)
+        if (!_started || _dead)
+        {
+            _cameraTarget = 0;
+            if (_cameraTarget > _cameraZ)
+            {
+                _cameraZ = Mathf.SmoothDamp(_cameraZ, _cameraTarget, ref _cameraDampVelocity, CameraTargetDampTimeOut, 0.2f, Time.fixedDeltaTime);
+            }
+            else
+            {
+                _cameraZ = Mathf.SmoothDamp(_cameraZ, _cameraTarget, ref _cameraDampVelocity, CameraTargetDampTimeIn, 0.8f, Time.fixedDeltaTime);
+            }
+
+            CameraFollowTarget.localPosition = new Vector3(0, 0, _cameraTarget);
+
+            return;
+        }
+
+        Vector3 forwardOnPlane = Vector3.ProjectOnPlane(_rigidbody.rotation * Vector3.forward, Vector3.up);
+        bool deadRotation = false;
+        if(forwardOnPlane.magnitude > 0)
+        {
+            deadRotation = Vector3.Angle(_rigidbody.rotation * Vector3.forward, forwardOnPlane) > 15;
+        }
+        else
+        {
+            deadRotation = true;
+        }
+       
+
+        if (transform.position.y < -0.2f || deadRotation)
+        {
+            Kill();
+        }
+
+        if (ManYelling)
         {
             _manAcceleration = Mathf.SmoothDamp(_manAcceleration, ManVolume, ref _manAccDampVelocity, AccelerationDampTime, 1000, Time.fixedDeltaTime);
         }
@@ -155,5 +208,25 @@ public class ManGoat : MonoBehaviour
 
         Vector3 forwardThrust = (_rigidbody.rotation * Vector3.forward) * thrust * Time.fixedDeltaTime;
         _rigidbody.AddForce(forwardThrust);
+    }
+
+    private void Kill()
+    {
+        if (!_dead)
+        {
+            _dead = true;
+            GlobalMics.Instance.State = GameState.Finished;
+        }
+    }
+
+    private void OnCollisionEnter(Collision col)
+    {
+        if (col.collider.tag == "Kill")
+        {
+            //Kill();
+            _rigidbody.AddForceAtPosition(col.contacts[0].normal * 1000, col.contacts[0].point);
+            Vector3 normal =  Quaternion.FromToRotation(Vector3.forward, Vector3.right) * col.contacts[0].normal;
+            _rigidbody.AddTorque(normal * 2000);
+        }
     }
 }

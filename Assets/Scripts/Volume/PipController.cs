@@ -71,7 +71,7 @@ public class PipController : MonoBehaviour
                         }
                         else
                         {
-                            _pips[i].SetAlpha(0.5f);
+                            _pips[i].SetAlpha(0.2f);
                         }
                     }
                     else
@@ -82,7 +82,7 @@ public class PipController : MonoBehaviour
                         }
                         else
                         {
-                            _pips[i].SetAlpha(0.5f);
+                            _pips[i].SetAlpha(0.2f);
                         }
                     }
                 }
