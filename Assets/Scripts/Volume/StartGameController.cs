@@ -79,6 +79,7 @@ public class StartGameController : MonoBehaviour
         }
 
         float BaseThrust = Mathf.Min(_manAcceleration, _goatAcceleration) * ((_manAcceleration + _goatAcceleration) / 2);
+        BaseThrust = GlobalMics.Instance.ThrustCurve.Evaluate(BaseThrust);
         if (BaseThrust < 0.1f)
         {
             float bigger = Mathf.Max(_manAcceleration, _goatAcceleration);
@@ -86,7 +87,7 @@ public class StartGameController : MonoBehaviour
         }
 
         //_startGameValue = Mathf.Clamp(_startGameValue + (BaseThrust * 4 * Time.deltaTime), 0, 1);
-        _startGameValue = _startGameValue + (BaseThrust * 4 * Time.deltaTime);
+        _startGameValue = _startGameValue + (BaseThrust * 6 * Time.deltaTime);
 
         if (GlobalMics.Instance.State == GameState.NotStarted)
         {
@@ -98,7 +99,7 @@ public class StartGameController : MonoBehaviour
 
         if (_startGameValue > 0)
         {
-            _startGameValue = Mathf.Clamp(_startGameValue - (_startGameValue * Time.deltaTime), 0, 1);
+            _startGameValue = Mathf.Clamp(_startGameValue - (Mathf.Clamp(_startGameValue, 0, 0.5f) * Time.deltaTime), 0, 1);
         }
 
         UpdatePips();

@@ -16,6 +16,7 @@ public class GlobalMics : MonoBehaviour
     private static GlobalMics _instance;
     public MicControl mic1;
     public MicControl mic2;
+    public AnimationCurve ThrustCurve;
 
     private Player Player1;
     private Player Player2;
@@ -82,7 +83,7 @@ public class GlobalMics : MonoBehaviour
         set
         {
             _state = value;
-            Debug.Log("StateSet: " + _state);
+            //Debug.Log("StateSet: " + _state);
         }
     }
 

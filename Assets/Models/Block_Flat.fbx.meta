@@ -1,30 +1,15 @@
 fileFormatVersion: 2
-guid: 95c84ee250b7143a39b0be37df3ac01d
-timeCreated: 1485024784
+guid: df4fbba849e2c45ffbb951710b799321
+timeCreated: 1485077909
 licenseType: Pro
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
-    100002: Blade
-    100004: Pendulum
-    100006: Pivot
     400000: //RootNode
-    400002: Blade
-    400004: Pendulum
-    400006: Pivot
     2300000: //RootNode
-    2300002: Blade
-    2300004: Pendulum
-    2300006: Pivot
     3300000: //RootNode
-    3300002: Blade
-    3300004: Pendulum
-    3300006: Pivot
-    4300000: Axe
-    4300002: Blade
-    4300004: Pivot
-    4300006: Pendulum
+    4300000: Block3
   materials:
     importMaterials: 1
     materialName: 0

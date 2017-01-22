@@ -191,7 +191,8 @@ public class ManGoat : MonoBehaviour
         CameraFollowTarget.localPosition = new Vector3(0, 0, _cameraTarget);
 
         float BaseThrust = Mathf.Min(_manAcceleration, _goatAcceleration) * ((_manAcceleration + _goatAcceleration) / 2);
-        if(BaseThrust < 0.1f)
+        BaseThrust = GlobalMics.Instance.ThrustCurve.Evaluate(BaseThrust);
+        if (BaseThrust < 0.1f)
         {
             float bigger = Mathf.Max(_manAcceleration, _goatAcceleration);
             BaseThrust = Mathf.Min(bigger, 0.1f);
