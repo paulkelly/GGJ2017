@@ -21,9 +21,12 @@ public class CameraFollow : MonoBehaviour
 
     private void Update()
     {
-        Vector3 target = new Vector3(Target.position.x, transform.position.y, Target.position.z) + _initalOffset;
-        float distance = Vector3.Distance(transform.position, target);
-        float maxSpeed = (distance * FollowCurve.Evaluate(Mathf.Clamp((distance / MaxDistance), 0, 1)) + 0.2f);
-        transform.position = Vector3.SmoothDamp(transform.position, target, ref _velocity, SmoothTime/maxSpeed, maxSpeed, Time.deltaTime);
+        if (GlobalMics.Instance.State != GameState.Win)
+        {
+            Vector3 target = new Vector3(Target.position.x, transform.position.y, Target.position.z) + _initalOffset;
+            float distance = Vector3.Distance(transform.position, target);
+            float maxSpeed = (distance * FollowCurve.Evaluate(Mathf.Clamp((distance / MaxDistance), 0, 1)) + 0.2f);
+            transform.position = Vector3.SmoothDamp(transform.position, target, ref _velocity, SmoothTime / maxSpeed, maxSpeed, Time.deltaTime);
+        }
     }
 }

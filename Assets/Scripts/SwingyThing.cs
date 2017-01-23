@@ -6,6 +6,7 @@ public class SwingyThing : MonoBehaviour
 {
     public AnimationCurve Curve;
     public bool In;
+    public float Phase = 2;
     public float SwingTime;
 
     public Vector3 Start;
@@ -19,7 +20,7 @@ public class SwingyThing : MonoBehaviour
     {
         _startPosition = transform.position;
         _rigidBody = GetComponent<Rigidbody>();
-        _time = SwingTime / 2;
+        _time = Phase;
     }
 
 	void FixedUpdate ()

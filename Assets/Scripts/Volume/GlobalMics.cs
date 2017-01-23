@@ -8,7 +8,8 @@ public enum GameState
     NotStarted,
     Starting,
     Started,
-    Finished
+    Finished,
+    Win
 }
 
 public class GlobalMics : MonoBehaviour
@@ -17,6 +18,7 @@ public class GlobalMics : MonoBehaviour
     public MicControl mic1;
     public MicControl mic2;
     public AnimationCurve ThrustCurve;
+    public AnimationCurve TorqueCurve;
 
     private Player Player1;
     private Player Player2;
@@ -45,6 +47,8 @@ public class GlobalMics : MonoBehaviour
         {
             Destroy(this);
         }
+
+        DontDestroyOnLoad(gameObject);
 
         Player1 = ReInput.players.GetPlayer(0);
         Player2 = ReInput.players.GetPlayer(1);

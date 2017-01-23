@@ -53,6 +53,7 @@ public class ManGoat : MonoBehaviour
     private float _startTimer;
     private float _startTime = 0.1f;
     private bool _dead;
+    private bool _win;
 
     private void Awake()
     {
@@ -102,7 +103,7 @@ public class ManGoat : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!_started || _dead)
+        if (!_started || _dead || _win)
         {
             _cameraTarget = 0;
             if (_cameraTarget > _cameraZ)
@@ -120,6 +121,7 @@ public class ManGoat : MonoBehaviour
         }
 
         Vector3 forwardOnPlane = Vector3.ProjectOnPlane(_rigidbody.rotation * Vector3.forward, Vector3.up);
+        Vector3 sidewaysOnPlane = Vector3.ProjectOnPlane(_rigidbody.rotation * Vector3.right, Vector3.up);
         bool deadRotation = false;
         if(forwardOnPlane.magnitude > 0)
         {
@@ -129,7 +131,15 @@ public class ManGoat : MonoBehaviour
         {
             deadRotation = true;
         }
-       
+        if(sidewaysOnPlane.magnitude > 0)
+        {
+            deadRotation = Vector3.Angle(_rigidbody.rotation * Vector3.right, sidewaysOnPlane) > 15;
+        }
+        else
+        {
+            deadRotation = true;
+        }
+        //Debug.Log(Vector3.Angle(_rigidbody.rotation * Vector3.forward, forwardOnPlane) + " : " + Vector3.Angle(_rigidbody.rotation * Vector3.right, sidewaysOnPlane));
 
         if (transform.position.y < -0.2f || deadRotation)
         {
@@ -157,9 +167,10 @@ public class ManGoat : MonoBehaviour
 
         float TurnAmount = _manAcceleration - _goatAcceleration;
         float torqueAmount = 0;
+        float normalTurning = GlobalMics.Instance.TorqueCurve.Evaluate(Mathf.Abs(TurnAmount));
         if (Mathf.Abs(TurnAmount) > 0.07f)
         {
-            torqueAmount = Mathf.Lerp(MinTorque, MaxTorque, Mathf.Abs(TurnAmount));
+            torqueAmount = Mathf.Lerp(MinTorque, MaxTorque, normalTurning);
         }
         else
         {
@@ -170,6 +181,7 @@ public class ManGoat : MonoBehaviour
             torqueAmount *= -1;
         }
         Vector3 torque = (_rigidbody.rotation * Vector3.up) * torqueAmount * Time.fixedDeltaTime;
+        //Vector3 torque = Vector3.up * torqueAmount * Time.fixedDeltaTime;
         _rigidbody.AddTorque(torque);
 
         float maxCameraDist = CameraMaxDistance + _rigidbody.velocity.magnitude;
@@ -192,11 +204,16 @@ public class ManGoat : MonoBehaviour
 
         float BaseThrust = Mathf.Min(_manAcceleration, _goatAcceleration) * ((_manAcceleration + _goatAcceleration) / 2);
         BaseThrust = GlobalMics.Instance.ThrustCurve.Evaluate(BaseThrust);
-        if (BaseThrust < 0.1f)
+        if (BaseThrust < 0.05f)
         {
             float bigger = Mathf.Max(_manAcceleration, _goatAcceleration);
-            BaseThrust = Mathf.Min(bigger, 0.1f);
+            BaseThrust = Mathf.Min(bigger, 0.05f);
         }
+        else
+        {
+            _rigidbody.angularVelocity = _rigidbody.angularVelocity - (_rigidbody.angularVelocity * BaseThrust * 2 * Time.fixedDeltaTime);
+        }
+
         float thrust = 0;
         if (Mathf.Abs(BaseThrust) > 0.07f)
         {
@@ -228,6 +245,15 @@ public class ManGoat : MonoBehaviour
             _rigidbody.AddForceAtPosition(col.contacts[0].normal * 1000, col.contacts[0].point);
             Vector3 normal =  Quaternion.FromToRotation(Vector3.forward, Vector3.right) * col.contacts[0].normal;
             _rigidbody.AddTorque(normal * 2000);
+        }
+    }
+
+    private void OnTriggerEnter(Collider col)
+    {
+        if(col.tag == "Goal")
+        {
+            _win = true;
+            GlobalMics.Instance.State = GameState.Win;
         }
     }
 }

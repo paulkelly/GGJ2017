@@ -17,9 +17,9 @@ FBXHeaderExtension:  {
 		Year: 2017
 		Month: 1
 		Day: 22
-		Hour: 9
-		Minute: 37
-		Second: 42
+		Hour: 12
+		Minute: 7
+		Second: 10
 		Millisecond: 0
 	}
 	Creator: "FBX SDK/FBX Plugins version 2013.1"
@@ -43,12 +43,12 @@ References:  {
 
 Definitions:  {
 	Version: 100
-	Count: 6
+	Count: 7
 	ObjectType: "Model" {
 		Count: 1
 	}
 	ObjectType: "Material" {
-		Count: 1
+		Count: 2
 	}
 	ObjectType: "Texture" {
 		Count: 1
@@ -153,41 +153,48 @@ Objects:  {
 		Shading: T
 		Culling: "CullingOff"
 		Vertices: 500,2.77555756156289e-14,-250,500,-2.77555756156289e-14,250,-500,-2.77555756156289e-14,250,-500,2.77555756156289e-14
-        ,-250
-		PolygonVertexIndex: 0,3,2,-2
-		Edges: 3,2,1,0
+        ,-250,500,-400,250,500,-400,-250,500,-1.75326836109161,-250,500,-1.75326836109161,250,-500,-400,250,-500,-400,-250
+        ,-500,-1.75326836109161,250,-500,-1.75326836109161,-250
+		PolygonVertexIndex: 0,3,2,-2,6,7,4,-6,10,11,9,-9,11,6,5,-10,7,10,8,-5
+		Edges: 3,2,1,0,5,7,6,4,11,9,10,8,14,12,18,16
 		GeometryVersion: 124
 		LayerElementNormal: 0 {
 			Version: 101
 			Name: ""
-			MappingInformationType: "ByVertice"
+			MappingInformationType: "ByPolygonVertex"
 			ReferenceInformationType: "Direct"
 			Normals: 0,0.99999988079071,1.11022289227626e-16,0,0.99999988079071,1.11022289227626e-16,0,0.99999988079071,1.11022289227626e-16
-             ,0,0.99999988079071,1.11022289227626e-16
+             ,0,0.99999988079071,1.11022289227626e-16,0.999999940395355,0,0,0.999999940395355,0,0,0.999999940395355,0,0,0.999999940395355
+             ,0,0,-0.999999940395355,0,0,-0.999999940395355,0,0,-0.999999940395355,0,0,-0.999999940395355,0,0,0,0,-0.999999940395355
+             ,0,0,-0.999999940395355,0,0,-0.999999940395355,0,0,-0.999999940395355,0,0,0.999999940395355,0,0,0.999999940395355
+             ,0,0,0.999999940395355,0,0,0.999999940395355
 		}
 		LayerElementUV: 0 {
 			Version: 101
 			Name: "map1"
 			MappingInformationType: "ByPolygonVertex"
 			ReferenceInformationType: "IndexToDirect"
-			UV: 1,0,1,1,-0.99999988079071,0,-0.99999988079071,1
-			UVIndex: 1,3,2,0
+			UV: 1,0,1,1,-0.99999988079071,0,-0.99999988079071,1,0.75,0.75000011920929,0.75,0.250000059604645,0.75,0.250000059604645
+             ,0.75,0.75000011920929,0.25,0.250000059604645,0.25,0.75000011920929,0.25,0.75000011920929,0.25,0.250000059604645
+             ,0.75,0.75000011920929,0.75,0.250000059604645,0.75,0.250000059604645,0.75,0.75000011920929,0.25,0.250000059604645
+             ,0.25,0.75000011920929,0.25,0.75000011920929,0.25,0.250000059604645
+			UVIndex: 1,3,2,0,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19
 		}
 		LayerElementMaterial: 0 {
 			Version: 101
 			Name: ""
-			MappingInformationType: "AllSame"
+			MappingInformationType: "ByPolygon"
 			ReferenceInformationType: "IndexToDirect"
-			Materials: 0
+			Materials: 0,1,1,1,1
 		}
 		LayerElementTexture: 0 {
 			Version: 101
 			Name: ""
-			MappingInformationType: "AllSame"
+			MappingInformationType: "ByPolygon"
 			ReferenceInformationType: "IndexToDirect"
 			BlendMode: "Normal"
 			TextureAlpha: 1
-			TextureId: 0
+			TextureId: 0,-1,-1,-1,-1
 		}
 		Layer: 0 {
 			Version: 100
@@ -223,14 +230,14 @@ Objects:  {
 			Comment: ""
 		}
 		Properties60:  {
-			Property: "DocumentUrl", "KString", "", "/Users/william/Dropbox/SPIFFING/Maya/scenes/Block3.fbx"
-			Property: "SrcDocumentUrl", "KString", "", "/Users/william/Dropbox/SPIFFING/Maya/scenes/Block3.fbx"
+			Property: "DocumentUrl", "KString", "", "/Users/william/Dropbox/SPIFFING/Maya/scenes/Block6.fbx"
+			Property: "SrcDocumentUrl", "KString", "", "/Users/william/Dropbox/SPIFFING/Maya/scenes/Block6.fbx"
 			Property: "Original", "Compound", ""
 			Property: "Original|ApplicationVendor", "KString", "", "Autodesk"
 			Property: "Original|ApplicationName", "KString", "", "Maya"
 			Property: "Original|ApplicationVersion", "KString", "", "2013"
 			Property: "Original|DateTime_GMT", "DateTime", "", ""
-			Property: "Original|FileName", "KString", "", "/Users/william/Dropbox/SPIFFING/Maya/scenes/Block3.fbx"
+			Property: "Original|FileName", "KString", "", "/Users/william/Dropbox/SPIFFING/Maya/scenes/Block6.fbx"
 			Property: "LastSaved", "Compound", ""
 			Property: "LastSaved|ApplicationVendor", "KString", "", "Autodesk"
 			Property: "LastSaved|ApplicationName", "KString", "", "Maya"
@@ -263,6 +270,34 @@ Objects:  {
 			Property: "Emissive", "Vector3D", "",0,0,0
 			Property: "Ambient", "Vector3D", "",0,0,0
 			Property: "Diffuse", "Vector3D", "",0.800000011920929,0.800000011920929,0.800000011920929
+			Property: "Opacity", "double", "",1
+		}
+	}
+	Material: "Material::black_mat", "" {
+		Version: 102
+		ShadingModel: "lambert"
+		MultiLayer: 0
+		Properties60:  {
+			Property: "ShadingModel", "KString", "", "Lambert"
+			Property: "MultiLayer", "bool", "",0
+			Property: "EmissiveColor", "ColorRGB", "",0,0,0
+			Property: "EmissiveFactor", "double", "",1
+			Property: "AmbientColor", "ColorRGB", "",0,0,0
+			Property: "AmbientFactor", "double", "",1
+			Property: "DiffuseColor", "ColorRGB", "",0.263157099485397,0.263157099485397,0.263157099485397
+			Property: "DiffuseFactor", "double", "",0.800000011920929
+			Property: "Bump", "Vector3D", "",0,0,0
+			Property: "NormalMap", "Vector3D", "",0,0,0
+			Property: "BumpFactor", "double", "",1
+			Property: "TransparentColor", "ColorRGB", "",0,0,0
+			Property: "TransparencyFactor", "double", "",1
+			Property: "DisplacementColor", "ColorRGB", "",0,0,0
+			Property: "DisplacementFactor", "double", "",1
+			Property: "VectorDisplacementColor", "ColorRGB", "",0,0,0
+			Property: "VectorDisplacementFactor", "double", "",1
+			Property: "Emissive", "Vector3D", "",0,0,0
+			Property: "Ambient", "Vector3D", "",0,0,0
+			Property: "Diffuse", "Vector3D", "",0.210525682725395,0.210525682725395,0.210525682725395
 			Property: "Opacity", "double", "",1
 		}
 	}
@@ -349,6 +384,7 @@ Connections:  {
 	Connect: "OO", "Model::Block3", "Model::Scene"
 	Connect: "OO", "Video::file1", "Texture::file1"
 	Connect: "OO", "Material::tiles_mat", "Model::Block3"
+	Connect: "OO", "Material::black_mat", "Model::Block3"
 	Connect: "OO", "Texture::file1", "Model::Block3"
 }
 ;Version 5 settings

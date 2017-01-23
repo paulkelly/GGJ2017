@@ -8,9 +8,11 @@ public class TitleScreenUI : MonoBehaviour
     public CanvasGroup Main;
     public CanvasGroup UI;
     public CanvasGroup Black;
+    public GameObject Win;
 
     private bool _started;
     private bool _finished;
+    private bool _win;
 
     private float _blackTime = 0.4f;
     private float _blackTimer = 0;
@@ -74,18 +76,49 @@ public class TitleScreenUI : MonoBehaviour
             {
                 Main.alpha = Mathf.Clamp01(Main.alpha + Time.deltaTime);
             }
-            
+        }
+        else if(GlobalMics.Instance.State == GameState.Win)
+        {
+            if (!_finished)
+            {
+                _finished = true;
+                Win.SetActive(true);
+                StartCoroutine(Finish());
+            }
+
+            if (_endTimer < _endWaitTime)
+            {
+                _endTimer += Time.deltaTime;
+            }
+            else
+            {
+                _finished = true;
+                Main.alpha = Mathf.Clamp01(Main.alpha + Time.deltaTime);
+            }
         }
 
-        if(GlobalMics.Instance.State != GameState.Finished && Input.GetKeyDown(KeyCode.Escape))
+        if((GlobalMics.Instance.State != GameState.Finished && GlobalMics.Instance.State != GameState.Win) && Input.GetKeyDown(KeyCode.Escape))
         {
             GlobalMics.Instance.State = GameState.Finished;
+        }
+
+        if(GlobalMics.Instance.State == GameState.Win && _win && (Input.anyKeyDown || GlobalMics.Instance.Player1Yelling || GlobalMics.Instance.Player2Yelling))
+        {
+            GlobalMics.Instance.State = GameState.NotStarted;
+            SceneManager.LoadScene(1);
         }
     }
 
     private IEnumerator RestartGame()
     {
         yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene(0);
+        GlobalMics.Instance.State = GameState.NotStarted;
+        SceneManager.LoadScene(1);
+    }
+
+    private IEnumerator Finish()
+    {
+        yield return new WaitForSeconds(3f);
+        _win = true;
     }
 }
