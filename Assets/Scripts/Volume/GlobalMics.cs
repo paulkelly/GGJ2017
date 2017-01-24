@@ -1,6 +1,7 @@
 ﻿using Rewired;
 using System.Collections;
 using System.Collections.Generic;
+using Billygoat;
 using UnityEngine;
 
 public enum GameState
@@ -15,8 +16,6 @@ public enum GameState
 public class GlobalMics : MonoBehaviour
 {
     private static GlobalMics _instance;
-    public MicControl mic1;
-    public MicControl mic2;
     public AnimationCurve ThrustCurve;
     public AnimationCurve TorqueCurve;
 
@@ -130,117 +129,96 @@ public class GlobalMics : MonoBehaviour
         }
     }
 
+    private bool _player1YellingController = false;
+    private bool _player2YellingController = false;
+    private float _player1ControllerVolume;
+    private float _player2ControllerVolume;
     private void Update()
     {
-        if (MicControlled)
+        float player1MicVolume = BGMicController.GetVolume(1);
+        float player2MicVolume = BGMicController.GetVolume(2);
+
+        if (_player1ControllerCD)
         {
-            bool buttonPress = Player1.GetButton(RewiredConsts.Action.Yell);
-            buttonPress |=  Player2.GetButton(RewiredConsts.Action.Yell);
-           // buttonPress |= Mathf.Abs(Player1.GetAxis(RewiredConsts.Action.Volume)) > 0.2f;
-           // buttonPress |= Mathf.Abs(Player2.GetAxis(RewiredConsts.Action.Volume)) > 0.2f;
+            _player1ControllerCD = !(_player1ControllerVolume < 0.1f && Player1.GetButtonDown(RewiredConsts.Action.Yell));
+        }
+        if (_player2ControllerCD)
+        {
+            _player2ControllerCD = !(_player2ControllerVolume < 0.1f && Player2.GetButtonDown(RewiredConsts.Action.Yell));
+        }
 
-            if (buttonPress)
-            {
-                float lookForMics = Mathf.Min(mic1.loudness, mic2.loudness);
-                MicControlled = lookForMics > 0.0005f;
-            }
+        _player1YellingController = !_player1ControllerCD && Player1.GetButton(RewiredConsts.Action.Yell);
 
-            _player1Yelling = mic1.loudness > MicThreshold;
-            if (_player1Yelling)
+        if (_player1YellingController)
+        {
+            _player1ControllerVolume = Mathf.Clamp01(_player1ControllerVolume + Time.deltaTime * 2);
+            _player1YellTimer = Mathf.Clamp(_player1YellTimer + (Time.deltaTime * _player1ControllerVolume), 0, MaxYellTime);
+
+            if (_player1YellTimer >= MaxYellTime)
             {
-                _player1Volume = mic1.loudness;
-            }
-            else
-            {
-                _player1Volume = 0;
-            }
-            _player2Yelling = mic2.loudness > MicThreshold;
-            if (_player2Yelling)
-            {
-                _player2Volume = mic2.loudness;
-            }
-            else
-            {
-                _player2Volume = 0;
+                _player1ControllerCD = true;
+                _player1YellingController = false;
             }
         }
         else
         {
-
-            float lookForMics = Mathf.Min(mic1.loudness, mic2.loudness);
-            MicControlled = lookForMics > 0.0005f;
-
-            //float player1Stick = Player1.GetAxis(RewiredConsts.Action.Volume);
-            //if(Mathf.Abs(player1Stick) > 0.2f)
-            //{
-            //    _player1Volume = Mathf.Clamp(_player1Volume + (player1Stick * Time.deltaTime), 0, 1);
-            //}
-
-            if(_player1ControllerCD)
+            if (_player1ControllerCD)
             {
-                _player1ControllerCD = !(_player1Volume < 0.1f && Player1.GetButtonDown(RewiredConsts.Action.Yell));
+                _player1ControllerVolume = Mathf.Clamp01(_player1ControllerVolume - Time.deltaTime * 3);
             }
+            else
+            {
+                _player1ControllerVolume = Mathf.Clamp01(_player1ControllerVolume - Time.deltaTime * 4);
+            }
+            _player1YellTimer = Mathf.Clamp(_player1YellTimer - (Time.deltaTime * 3f), 0, MaxYellTime);
+        }
+
+        _player2YellingController = !_player2ControllerCD && Player2.GetButton(RewiredConsts.Action.Yell);
+
+        if (_player2YellingController)
+        {
+            _player2ControllerVolume = Mathf.Clamp01(_player2ControllerVolume + Time.deltaTime * 2);
+            _player2YellTimer = Mathf.Clamp(_player2YellTimer + (Time.deltaTime * _player2ControllerVolume), 0, MaxYellTime);
+
+            if (_player2YellTimer >= MaxYellTime)
+            {
+                _player2ControllerCD = true;
+                _player2YellingController = false;
+            }
+        }
+        else
+        {
             if (_player2ControllerCD)
             {
-                _player2ControllerCD = !(_player2Volume < 0.1f && Player2.GetButtonDown(RewiredConsts.Action.Yell));
-            }
-
-            _player1Yelling = !_player1ControllerCD && Player1.GetButton(RewiredConsts.Action.Yell);
-
-            if(_player1Yelling)
-            {
-                _player1Volume = Mathf.Clamp01(_player1Volume + Time.deltaTime * 2);
-                _player1YellTimer = Mathf.Clamp(_player1YellTimer + (Time.deltaTime * _player1Volume), 0, MaxYellTime);
-
-                if(_player1YellTimer >= MaxYellTime)
-                {
-                    _player1ControllerCD = true;
-                    _player1Yelling = false;
-                }
+                _player2ControllerVolume = Mathf.Clamp01(_player2ControllerVolume - Time.deltaTime * 3);
             }
             else
             {
-                if (_player1ControllerCD)
-                {
-                    _player1Volume = Mathf.Clamp01(_player1Volume - Time.deltaTime * 3);
-                }
-                else
-                {
-                    _player1Volume = Mathf.Clamp01(_player1Volume - Time.deltaTime * 4);
-                }
-                _player1YellTimer = Mathf.Clamp(_player1YellTimer - (Time.deltaTime * 3f), 0, MaxYellTime);
+                _player2ControllerVolume = Mathf.Clamp01(_player2ControllerVolume - Time.deltaTime * 4);
             }
+            _player2YellTimer = Mathf.Clamp(_player2YellTimer - (Time.deltaTime * 3f), 0, MaxYellTime);
+        }
 
-            //float player2Stick = Player2.GetAxis(RewiredConsts.Action.Volume);
-            //if (Mathf.Abs(player2Stick) > 0.2f)
-            //{
-            //    _player2Volume = Mathf.Clamp(_player2Volume + (player2Stick * Time.deltaTime), 0, 1);
-            //}
-            _player2Yelling = !_player2ControllerCD && Player2.GetButton(RewiredConsts.Action.Yell);
 
-            if (_player2Yelling)
-            {
-                _player2Volume = Mathf.Clamp01(_player2Volume + Time.deltaTime * 2);
-                _player2YellTimer = Mathf.Clamp(_player2YellTimer + (Time.deltaTime * _player2Volume), 0, MaxYellTime);
+        _player1Volume = Mathf.Max(_player1ControllerVolume, player1MicVolume);
+        _player2Volume = Mathf.Max(_player2ControllerVolume, player2MicVolume);
 
-                if (_player2YellTimer >= MaxYellTime)
-                {
-                    _player2ControllerCD = true;
-                    _player2Yelling = false;
-                }
-            }
-            else
-            {
-                if (_player2ControllerCD)
-                {
-                    _player2Volume = Mathf.Clamp01(_player2Volume - Time.deltaTime * 3);
-                }
-                else
-                {
-                    _player2Volume = Mathf.Clamp01(_player2Volume - Time.deltaTime * 4);
-                }
-                _player2YellTimer = Mathf.Clamp(_player2YellTimer - (Time.deltaTime * 3f), 0, MaxYellTime);
-            }
+        if (_player1ControllerVolume > player1MicVolume)
+        {
+            _player1Yelling = _player1YellingController;
+        }
+        else
+        {
+            _player1Yelling = _player1Volume > MicThreshold;
+        }
+
+        if (_player2ControllerVolume > player2MicVolume)
+        {
+            _player2Yelling = _player2YellingController;
+        }
+        else
+        {
+            _player2Yelling = _player2Volume > MicThreshold;
         }
     }
 }
