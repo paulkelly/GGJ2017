@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: a75a05adb285f4d108d51739ecc8ee26
+timeCreated: 1485255516
+licenseType: Pro
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Compacta Bd BT
+  fontNames:
+  - Compacta Bd BT
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
