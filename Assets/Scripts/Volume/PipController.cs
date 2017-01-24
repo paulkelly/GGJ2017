@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Billygoat;
 using UnityEngine;
 
 public class PipController : MonoBehaviour
@@ -42,50 +43,53 @@ public class PipController : MonoBehaviour
 
     private void Update()
     {
-        if (Player == 1)
-        {
-            Volume = GlobalMics.Instance.Player1Volume;
-        }
-        else
-        {
-            Volume = GlobalMics.Instance.Player2Volume;
-        }
+        //if (Player == 1)
+        //{
+        //    Volume = GlobalMics.Instance.Player1Volume;
+        //}
+        //else
+        //{
+        //    Volume = GlobalMics.Instance.Player2Volume;
+        //}
+        Volume = BGMicController.GetVolume(Player);
 
         for (int i = 0; i < _pips.Count; i++)
         {
             //1-Volume because scripts are in back to front order
             bool on = ((float)i / (float)_pips.Count) >= (1 - Volume);
-            if(on)
+            if (on)
             {
-                if (GlobalMics.Instance.MicControlled)
-                {
-                    _pips[i].SetAlpha(1);
-                }
-                else
-                {
-                    if (Player == 1)
-                    {
-                        if(GlobalMics.Instance.Player1Yelling)
-                        {
-                            _pips[i].SetAlpha(1);
-                        }
-                        else
-                        {
-                            _pips[i].SetAlpha(0.2f);
-                        }
-                    }
-                    else
-                    {
-                        if (GlobalMics.Instance.Player2Yelling)
-                        {
-                            _pips[i].SetAlpha(1);
-                        }
-                        else
-                        {
-                            _pips[i].SetAlpha(0.2f);
-                        }
-                    }
-                }
+                //if (GlobalMics.Instance.MicControlled)
+                //{
+                //    _pips[i].SetAlpha(1);
+                //}
+                //else
+                //{
+                //    if (Player == 1)
+                //    {
+                //        if (GlobalMics.Instance.Player1Yelling)
+                //        {
+                //            _pips[i].SetAlpha(1);
+                //        }
+                //        else
+                //        {
+                //            _pips[i].SetAlpha(0.2f);
+                //        }
+                //    }
+                //    else
+                //    {
+                //        if (GlobalMics.Instance.Player2Yelling)
+                //        {
+                //            _pips[i].SetAlpha(1);
+                //        }
+                //        else
+                //        {
+                //            _pips[i].SetAlpha(0.2f);
+                //        }
+                //    }
+                //}
+
+                _pips[i].SetAlpha(1);
             }
             else
             {
