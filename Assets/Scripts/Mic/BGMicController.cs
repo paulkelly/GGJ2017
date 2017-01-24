@@ -20,6 +20,7 @@ namespace Billygoat
             if (_instance != null)
             {
                 Destroy(this);
+                return;
             }
             DontDestroyOnLoad(gameObject);
             _instance = this;

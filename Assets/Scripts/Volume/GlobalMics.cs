@@ -8,6 +8,7 @@ public enum GameState
 {
     NotStarted,
     Starting,
+    Intro,
     Started,
     Finished,
     Win
@@ -45,6 +46,7 @@ public class GlobalMics : MonoBehaviour
         if (_instance != null)
         {
             Destroy(this);
+            return;
         }
 
         DontDestroyOnLoad(gameObject);
