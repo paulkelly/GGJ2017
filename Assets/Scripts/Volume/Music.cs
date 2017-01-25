@@ -20,7 +20,7 @@ public class Music : MonoBehaviour
     {
         if (_instance != null)
         {
-            Destroy(this);
+            Destroy(gameObject);
             return;
         }
 

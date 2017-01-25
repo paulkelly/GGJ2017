@@ -215,7 +215,7 @@ public class TitleScreenUI : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
         GlobalMics.Instance.State = GameState.NotStarted;
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(0);
     }
 
     private IEnumerator Finish()
