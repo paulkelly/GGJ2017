@@ -6,9 +6,9 @@ using UnityEngine;
 
 public enum GameState
 {
+    Intro,
     NotStarted,
     Starting,
-    Intro,
     Started,
     Finished,
     Win
@@ -80,7 +80,7 @@ public class GlobalMics : MonoBehaviour
         }
     }
 
-    private GameState _state;
+    private GameState _state = GameState.Intro;
     public GameState State
     {
         get { return _state; }

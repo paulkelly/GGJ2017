@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class TitleScreenUI : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class TitleScreenUI : MonoBehaviour
     public CanvasGroup GameUICanvas;
     public Camera TitleScreenCamera;
     public Animator TitleAnimator;
+
+    public CanvasGroup GameBlack;
 
     private bool _started;
     private bool _finished;
@@ -29,7 +32,12 @@ public class TitleScreenUI : MonoBehaviour
     {
     }
 
-    private GameState _lastGameState = GameState.NotStarted;
+    private void Start()
+    {
+        StartCoroutine(WaitForIntro());
+    }
+
+    private GameState _lastGameState = GameState.Intro;
     private void Update()
     {
         if(GlobalMics.Instance.State != _lastGameState)
@@ -40,7 +48,6 @@ public class TitleScreenUI : MonoBehaviour
             }
             else if (GlobalMics.Instance.State == GameState.Started)
             {
-                Debug.Log(_lastGameState);
                 GameStarted();
             }
             else if (GlobalMics.Instance.State == GameState.Finished)
@@ -137,14 +144,12 @@ public class TitleScreenUI : MonoBehaviour
 
     private void GameStarting()
     {
-        Debug.Log("GameStarting");
         TitleAnimator.SetTrigger("Start");
         StartCoroutine(WaitForOutAnimation());
     }
 
     private void GameStarted()
     {
-        Debug.Log("GameStarted");
         TitleCanvas.alpha = 0;
         GameUICanvas.alpha = 1;
         GameUIAnimator.SetTrigger("Go");
@@ -153,12 +158,29 @@ public class TitleScreenUI : MonoBehaviour
 
     private void GameFinished()
     {
-
+        _finished = true;
+        StartCoroutine(RestartGame());
     }
 
     private void GameWon()
     {
+        _finished = true;
+        StartCoroutine(RestartGame());
+    }
 
+    private IEnumerator WaitForIntro()
+    {
+        while (!TitleAnimator.GetCurrentAnimatorStateInfo(0).IsName("In"))
+        {
+            yield return null;
+        }
+
+        while (TitleAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.7f)
+        {
+            yield return null;
+        }
+
+        GlobalMics.Instance.State = GameState.NotStarted;
     }
 
     private IEnumerator WaitForOutAnimation()
@@ -174,12 +196,24 @@ public class TitleScreenUI : MonoBehaviour
         }
 
         GlobalMics.Instance.State = GameState.Started;
-        Debug.Log("SetState");
     }
 
+    private float _fadeOutTimer = 0;
+    private float _fadeOutTime = 3;
     private IEnumerator RestartGame()
     {
-        yield return new WaitForSeconds(3f);
+        Image blackImage = GameBlack.GetComponent<Image>();
+        blackImage.color = new Color(blackImage.color.r, blackImage.color.g, blackImage.color.b, 1);
+        GameBlack.alpha = 0;
+        while (_fadeOutTimer < _fadeOutTime)
+        {
+            _fadeOutTimer += Time.deltaTime;
+            GameBlack.alpha = Mathf.Lerp(0, 1, _fadeOutTimer / _fadeOutTime);
+            yield return null;
+        }
+        GameBlack.alpha = 1;
+
+        yield return new WaitForSeconds(1f);
         GlobalMics.Instance.State = GameState.NotStarted;
         SceneManager.LoadScene(1);
     }

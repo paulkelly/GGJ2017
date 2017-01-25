@@ -52,6 +52,11 @@ public class StartGameController : MonoBehaviour
 
     private float _startGameValue;
 
+    private float _startGameMulti = 0.4f;
+    private readonly float _startGameMultiTarget = 5;
+    private float _startGameMultiVel = 0;
+    private readonly float _startGameMultiDampTime = 0.5f;
+
     private void Update()
     {
         ManYelling = GlobalMics.Instance.Player1Yelling;
@@ -86,15 +91,21 @@ public class StartGameController : MonoBehaviour
             BaseThrust = Mathf.Min(bigger, 0.1f);
         }
 
-        //_startGameValue = Mathf.Clamp(_startGameValue + (BaseThrust * 4 * Time.deltaTime), 0, 1);
-        _startGameValue = _startGameValue + (BaseThrust * 6 * Time.deltaTime);
-
         if (GlobalMics.Instance.State == GameState.NotStarted)
         {
+            _startGameMulti = Mathf.SmoothDamp(_startGameMulti, _startGameMultiTarget, ref _startGameMultiVel,
+                _startGameMultiDampTime, 100, Time.deltaTime);
+            _startGameValue = _startGameValue + (BaseThrust * _startGameMulti * Time.deltaTime);
+
             if (_startGameValue >= 1)
             {
                 GlobalMics.Instance.StartGame();
             }
+        }
+        else
+        {
+            BaseThrust = Mathf.Min(BaseThrust, 0.5f);
+            _startGameValue = _startGameValue + (BaseThrust * _startGameMulti * Time.deltaTime);
         }
 
         if (_startGameValue > 0)

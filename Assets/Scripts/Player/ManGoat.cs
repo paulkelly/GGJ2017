@@ -13,6 +13,8 @@ public class ManGoat : MonoBehaviour
     public ParticleSystem ManParticles;
     public ParticleSystem GoatParticles;
 
+    public Transform StartTransform;
+
     public bool ManYelling;
     public bool GoatYelling;
 
@@ -50,10 +52,14 @@ public class ManGoat : MonoBehaviour
     private float _goatAccDampVelocity;
 
     private bool _started;
+    private bool _startForceApplied;
     private float _startTimer;
     private float _startTime = 0.1f;
     private bool _dead;
     private bool _win;
+
+    private float _deadTimer = 0;
+    private float _deadTime = 0.3f;
 
     private void Awake()
     {
@@ -62,20 +68,6 @@ public class ManGoat : MonoBehaviour
 
     private void Update()
     {
-        if(!_started)
-        {
-            if (GlobalMics.Instance.GameStarted)
-            {
-                _startTimer += Time.deltaTime;
-                if (_startTimer > _startTime)
-                {
-                    _started = true;
-                }
-            }
-
-            return;
-        }
-
         if (ManYelling)
         {
             _manAnimationAcc = Mathf.SmoothDamp(_manAnimationAcc, ManVolume, ref _manAnimationDampVelocity, AnimationDampTime, 1000, Time.deltaTime);
@@ -97,23 +89,43 @@ public class ManGoat : MonoBehaviour
         ManAnimator.SetFloat("Scream", _manAnimationAcc);
         GoatAnimator.SetFloat("Scream", _goatAnimationAcc);
 
+        if (!_started)
+        {
+            if (GlobalMics.Instance.GameStarted)
+            {
+                //_startTimer += Time.deltaTime;
+                //if (_startTimer > _startTime)
+                //{
+                //    _started = true;
+                //}
+
+                _started = true;
+            }
+
+            return;
+        }
+
         ManParticles.emissionRate = _manAnimationAcc*15;
         GoatParticles.emissionRate = _goatAnimationAcc*15;
     }
 
     private void FixedUpdate()
     {
+        if (!_startForceApplied)
+        {
+            if (GlobalMics.Instance.GameStarted)
+            {
+                _rigidbody.MovePosition(StartTransform.position);
+                _rigidbody.AddForce(StartTransform.forward * Random.Range(4000f, 6000f));
+                _rigidbody.AddTorque((_rigidbody.rotation * Vector3.up) * Random.Range(-1f, 1f) * 800f);
+                _startForceApplied = true;
+            }
+        }
+
         if (!_started || _dead || _win)
         {
             _cameraTarget = 0;
-            if (_cameraTarget > _cameraZ)
-            {
-                _cameraZ = Mathf.SmoothDamp(_cameraZ, _cameraTarget, ref _cameraDampVelocity, CameraTargetDampTimeOut, 0.2f, Time.fixedDeltaTime);
-            }
-            else
-            {
-                _cameraZ = Mathf.SmoothDamp(_cameraZ, _cameraTarget, ref _cameraDampVelocity, CameraTargetDampTimeIn, 0.8f, Time.fixedDeltaTime);
-            }
+            _cameraZ = Mathf.SmoothDamp(_cameraZ, _cameraTarget, ref _cameraDampVelocity, CameraTargetDampTimeIn, 2f, Time.fixedDeltaTime);
 
             CameraFollowTarget.localPosition = new Vector3(0, 0, _cameraTarget);
 
@@ -125,7 +137,7 @@ public class ManGoat : MonoBehaviour
         bool deadRotation = false;
         if(forwardOnPlane.magnitude > 0)
         {
-            deadRotation = Vector3.Angle(_rigidbody.rotation * Vector3.forward, forwardOnPlane) > 15;
+            deadRotation |= Vector3.Angle(_rigidbody.rotation * Vector3.forward, forwardOnPlane) > 15;
         }
         else
         {
@@ -133,7 +145,7 @@ public class ManGoat : MonoBehaviour
         }
         if(sidewaysOnPlane.magnitude > 0)
         {
-            deadRotation = Vector3.Angle(_rigidbody.rotation * Vector3.right, sidewaysOnPlane) > 15;
+            deadRotation |= Vector3.Angle(_rigidbody.rotation * Vector3.right, sidewaysOnPlane) > 15;
         }
         else
         {
@@ -143,7 +155,15 @@ public class ManGoat : MonoBehaviour
 
         if (transform.position.y < -0.2f || deadRotation)
         {
-            Kill();
+            _deadTimer += Time.fixedDeltaTime;
+            if (_deadTimer > _deadTime)
+            {
+                Kill();
+            }
+        }
+        else
+        {
+            _deadTimer = 0;
         }
 
         if (ManYelling)
