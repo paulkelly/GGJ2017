@@ -59,6 +59,11 @@ public class StartGameController : MonoBehaviour
 
     private void Update()
     {
+        if (!(GlobalMics.Instance.State == GameState.NotStarted || GlobalMics.Instance.State == GameState.Intro))
+        {
+            return;
+        }
+
         ManYelling = GlobalMics.Instance.Player1Yelling;
         ManVolume = GlobalMics.Instance.Player1Volume;
 
@@ -84,7 +89,7 @@ public class StartGameController : MonoBehaviour
         }
 
         float BaseThrust = Mathf.Min(_manAcceleration, _goatAcceleration) * ((_manAcceleration + _goatAcceleration) / 2);
-        BaseThrust = GlobalMics.Instance.ThrustCurve.Evaluate(BaseThrust);
+        BaseThrust = GlobalMics.Instance.ThrustCurve.Evaluate(Mathf.Clamp01(BaseThrust));
         if (BaseThrust < 0.1f)
         {
             float bigger = Mathf.Max(_manAcceleration, _goatAcceleration);

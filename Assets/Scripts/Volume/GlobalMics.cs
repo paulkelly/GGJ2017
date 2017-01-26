@@ -135,10 +135,58 @@ public class GlobalMics : MonoBehaviour
     private bool _player2YellingController = false;
     private float _player1ControllerVolume;
     private float _player2ControllerVolume;
+    private float _player1ControllerVolumePaused;
+    private float _player2ControllerVolumePaused;
     private void Update()
     {
         float player1MicVolume = BGMicController.GetVolume(1);
         float player2MicVolume = BGMicController.GetVolume(2);
+
+        if (Time.timeScale == 0)
+        {
+            bool player1Yelling = Player1.GetButton(RewiredConsts.Action.Yell);
+            bool player2Yelling = Player2.GetButton(RewiredConsts.Action.Yell);
+
+            if (player1Yelling)
+            {
+                _player1ControllerVolumePaused = Mathf.Clamp01(_player1ControllerVolumePaused + Time.unscaledDeltaTime*2);
+            }
+            else
+            {
+                _player1ControllerVolumePaused = Mathf.Clamp01(_player1ControllerVolumePaused - Time.unscaledDeltaTime * 4);
+            }
+            if (player2Yelling)
+            {
+                _player2ControllerVolumePaused = Mathf.Clamp01(_player2ControllerVolumePaused + Time.unscaledDeltaTime * 2);
+            }
+            else
+            {
+                _player2ControllerVolumePaused = Mathf.Clamp01(_player2ControllerVolumePaused - Time.unscaledDeltaTime * 4);
+            }
+
+            _player1Volume = Mathf.Max(_player1ControllerVolumePaused, player1MicVolume);
+            _player2Volume = Mathf.Max(_player2ControllerVolumePaused, player2MicVolume);
+
+            if (_player1ControllerVolume > player1MicVolume)
+            {
+                _player1Yelling = _player1YellingController;
+            }
+            else
+            {
+                _player1Yelling = _player1Volume > MicThreshold;
+            }
+
+            if (_player2ControllerVolume > player2MicVolume)
+            {
+                _player2Yelling = _player2YellingController;
+            }
+            else
+            {
+                _player2Yelling = _player2Volume > MicThreshold;
+            }
+
+            return;
+        }
 
         if (_player1ControllerCD)
         {

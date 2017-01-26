@@ -95,7 +95,7 @@ namespace Billygoat
                 if (nextVolume >= 0)
                 {
                     nextVolume = Mathf.Clamp01(nextVolume);
-                    _volume = Mathf.Clamp01(_volume + (nextVolume - _volume)*(Time.deltaTime*30));
+                    _volume = Mathf.Clamp01(_volume + (nextVolume - _volume)*(Time.unscaledDeltaTime*30));
                 }
             }
             else

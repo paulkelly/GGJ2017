@@ -86,8 +86,11 @@ public class ManGoat : MonoBehaviour
             _goatAnimationAcc = Mathf.SmoothDamp(_goatAnimationAcc, 0, ref _goatAnimationDampVelocity, AnimationDampTime, 100, Time.deltaTime);
         }
 
-        ManAnimator.SetFloat("Scream", _manAnimationAcc);
-        GoatAnimator.SetFloat("Scream", _goatAnimationAcc);
+        if (Time.timeScale > 0)
+        {
+            ManAnimator.SetFloat("Scream", _manAnimationAcc);
+            GoatAnimator.SetFloat("Scream", _goatAnimationAcc);
+        }
 
         if (!_started)
         {
