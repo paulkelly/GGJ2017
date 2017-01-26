@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Billygoat;
+using Billygoat.InputManager.GUI;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,7 @@ public class SensitivityGUI : MonoBehaviour
     public int Player;
     public ClickableArrowGUI LeftArrow;
     public ClickableArrowGUI RightArrow;
+    public CanvasGroupFader NoMicGroup;
     private Text _text;
 
     private void Awake()
@@ -21,10 +23,29 @@ public class SensitivityGUI : MonoBehaviour
     {
         if (BGMicController.Instance != null)
         {
-            int sensitivity = BGMicController.GetSensitivity(Player);
-            LeftArrow.SetEnabled(sensitivity > 0);
-            RightArrow.SetEnabled(sensitivity < 5);
-            _text.text = sensitivity.ToString();
+            if (BGMicController.HasMic(Player))
+            {
+                if (NoMicGroup.Visible)
+                {
+                    NoMicGroup.Visible = false;
+                }
+
+                int sensitivity = BGMicController.GetSensitivity(Player);
+                LeftArrow.SetEnabled(sensitivity > 0);
+                RightArrow.SetEnabled(sensitivity < 5);
+                _text.text = sensitivity.ToString();
+            }
+            else
+            {
+                if (!NoMicGroup.Visible)
+                {
+                    NoMicGroup.Visible = true;
+                }
+
+                LeftArrow.SetEnabled(false);
+                RightArrow.SetEnabled(false);
+                _text.text = "";
+            }
         }
 
     }

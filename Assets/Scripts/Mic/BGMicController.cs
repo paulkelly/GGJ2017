@@ -51,6 +51,26 @@ namespace Billygoat
             _instance.SetPlayerSensitivity(id-1, level);
         }
 
+        public static bool HasMic(int id)
+        {
+            return _instance.PlayerHasMic(id - 1);
+        }
+
+        public static bool HasExtraMics()
+        {
+            return _instance.MicsAvailable();
+        }
+
+        public static void SearchMicsUp(int player)
+        {
+            _instance.FindNewMic(player-1, true);
+        }
+
+        public static void SearchMicsDown(int player)
+        {
+            _instance.FindNewMic(player - 1, false);
+        }
+
         private MicDetector _micDetector;
         private BGMicrophone[] _players = new BGMicrophone[NumberOfPlayers];
         private Dictionary<int, string> _playerDevices = new Dictionary<int, string>();
@@ -104,6 +124,20 @@ namespace Billygoat
             {
                 Debug.LogWarning("Trying to get microphone for player outside of range, currently setup for " + NumberOfPlayers + " players");
             }
+        }
+
+        private bool PlayerHasMic(int id)
+        {
+            if (id < NumberOfPlayers)
+            {
+                return _players[id] != null;
+            }
+            else
+            {
+                Debug.LogWarning("Trying to get microphone for player outside of range, currently setup for " + NumberOfPlayers + " players");
+            }
+
+            return false;
         }
 
         private bool _initialized;
@@ -184,17 +218,79 @@ namespace Billygoat
                     {
                         _playerDevices[id] = newDevice;
                         _players[id] = _micDetector.GetDevice(newDevice);
-                        Log("Microphone disconncted: " + deviceName + ", player " + id + " reconnected to " + newDevice);
+                        Log("Microphone disconncted: " + deviceName + ", player " + (id+1) + " reconnected to " + newDevice);
                         return;
                     }
                 }
 
-                Log("Microphone disconncted: " + deviceName + ", player " + id + " lost device.");
+                _players[id] = null;
+                Log("Microphone disconncted: " + deviceName + ", player " + (id+1) + " lost device.");
             }
             else
             {
                 Log("Microphone disconncted: " + deviceName + " (not associated to any player)");
             }
+        }
+
+        private void FindNewMic(int playerId, bool ascending)
+        {
+            if (playerId >= NumberOfPlayers) return;
+            if (_players[playerId] != null)
+            {
+                string current = _players[playerId].DeviceName;
+                int currentDevice = 0;
+                for (int i = 0; i < _micDetector.GetDeviceList().Length; i++)
+                {
+                    if (_micDetector.GetDeviceList()[i].Equals(_players[playerId].DeviceName))
+                    {
+                        currentDevice = i;
+                        break;
+                    }
+                }
+
+                for (int i = 0; i < _micDetector.GetDeviceList().Length; i++)
+                {
+                    if (ascending)
+                    {
+                        currentDevice = (currentDevice + 1)%_micDetector.GetDeviceList().Length;
+                    }
+                    else
+                    {
+                        currentDevice = (currentDevice - 1);
+                        if (currentDevice < 0)
+                        {
+                            currentDevice = _micDetector.GetDeviceList().Length - 1;
+                        }
+                    }
+
+                    bool _micAlreadyClaimed = false;
+                    string newMic = _micDetector.GetDeviceList()[currentDevice];
+                    foreach (var kvp in _playerDevices)
+                    {
+                        if (kvp.Value.Equals(_micDetector.GetDeviceList()[currentDevice]))
+                        {
+                            _micAlreadyClaimed = true;
+                            newMic = _micDetector.GetDeviceList()[currentDevice];
+                            break;
+                        }
+                    }
+
+                    if (!_micAlreadyClaimed)
+                    {
+                        _playerDevices[playerId] = newMic;
+                        _players[playerId] = _micDetector.GetDevice(newMic);
+                        Log("Microphone changed: " + current + ", player " + (playerId + 1) + " reconnected to " + newMic);
+                        return;
+                    }
+
+                }
+
+            }
+        }
+
+        private bool MicsAvailable()
+        {
+            return _micDetector.GetDeviceList().Length > NumberOfPlayers;
         }
 
         private void Log(string message)

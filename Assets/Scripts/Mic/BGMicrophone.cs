@@ -40,6 +40,8 @@ namespace Billygoat
             get { return BaseSensitivity[_sensitivtyLevel]; }
         }
 
+        public string DeviceName { get { return _name; } }
+
         public float Volume
         {
             get

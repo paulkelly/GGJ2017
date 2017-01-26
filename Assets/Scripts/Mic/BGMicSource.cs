@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Billygoat
@@ -35,21 +36,29 @@ namespace Billygoat
         public void Setup(string microphoneName)
         {
             _deviceName = microphoneName;
-            _audioSource.clip = Microphone.Start(_deviceName, true, 1, SampleSize);
-            _isPlaying = true;
-            StartCoroutine(StartClip());
+            StartRecording();
         }
 
         public void StartRecording()
         {
-            _audioSource.clip = Microphone.Start(_deviceName, true, 1, SampleSize);
             _isPlaying = true;
+            _readHead = 0;
+            try
+            {
+                _audioSource.clip = Microphone.Start(_deviceName, true, 1, SampleSize);
+            }
+            catch (Exception e)
+            {
+                Debug.Log("Failed to start recording " + DeviceName + " : " + e.Message + "\n" + e.StackTrace);
+            }
+            StopAllCoroutines();
             StartCoroutine(StartClip());
         }
 
         public void StopRecording()
         {
             //Debug.Log(DeviceName + " recording stopped.");
+            Microphone.End(_deviceName);
             _isPlaying = false;
             _hasStartedPlaying = false;
             _audioSource.clip = null;
@@ -57,16 +66,31 @@ namespace Billygoat
 
         private void Restart()
         {
-            StopRecording();
-            StartRecording();
+            if (Microphone.devices.Contains(_deviceName))
+            {
+                StopRecording();
+                StartRecording();
+            }
         }
 
+        private float startTime = 0;
+        private float timer = 1;
         private IEnumerator StartClip()
         {
-            while (!(Microphone.GetPosition(_deviceName) > 0))
+            startTime = 0;
+            while (!(Microphone.IsRecording(_deviceName)) && startTime < timer)
             {
+                startTime += Time.unscaledDeltaTime;
                 yield return null;
             }
+
+            //Try to start recording again after waiting 1 sec without any progress
+            if (startTime >= timer)
+            {
+                StartRecording();
+                yield break;
+            }
+
             _audioSource.Play();
             _hasStartedPlaying = true;
             //Debug.Log(DeviceName + " recording started.");
@@ -89,6 +113,7 @@ namespace Billygoat
 
         void Update()
         {
+            //_isRecording = Microphone.IsRecording(_deviceName);
             if (_hasStartedPlaying)
             {
                 float nextVolume = ReadAudioSourceVolume();
