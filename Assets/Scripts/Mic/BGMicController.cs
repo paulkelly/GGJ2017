@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 namespace Billygoat
@@ -40,6 +41,16 @@ namespace Billygoat
             return _instance.GetPlayerVolume(id-1);
         }
 
+        public static int GetSensitivity(int id)
+        {
+            return _instance.GetPlayerSensitivity(id-1);
+        }
+
+        public static void SetSensitivity(int id, int level)
+        {
+            _instance.SetPlayerSensitivity(id-1, level);
+        }
+
         private MicDetector _micDetector;
         private BGMicrophone[] _players = new BGMicrophone[NumberOfPlayers];
         private Dictionary<int, string> _playerDevices = new Dictionary<int, string>();
@@ -60,6 +71,39 @@ namespace Billygoat
 
             //fallback result
             return 0;
+        }
+
+        private int GetPlayerSensitivity(int id)
+        {
+            if (id < NumberOfPlayers)
+            {
+                if (_players[id] != null)
+                {
+                    return _players[id].SensitivityLevel;
+                }
+            }
+            else
+            {
+                Debug.LogWarning("Trying to get microphone for player outside of range, currently setup for " + NumberOfPlayers + " players");
+            }
+
+            //fallback result
+            return 0;
+        }
+
+        private void SetPlayerSensitivity(int id, int level)
+        {
+            if (id < NumberOfPlayers)
+            {
+                if (_players[id] != null)
+                {
+                    _players[id].SensitivityLevel = level;
+                }
+            }
+            else
+            {
+                Debug.LogWarning("Trying to get microphone for player outside of range, currently setup for " + NumberOfPlayers + " players");
+            }
         }
 
         private bool _initialized;

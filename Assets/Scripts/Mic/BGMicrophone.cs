@@ -20,7 +20,7 @@ namespace Billygoat
 
         private readonly float[] BaseSensitivity = new float[]
         {
-            0,
+            0.5f,
             1,
             2,
             3,
