@@ -130,16 +130,16 @@ public class TitleScreenUI : MonoBehaviour
         //    }
         //}
 
-        if ((GlobalMics.Instance.State != GameState.Finished && GlobalMics.Instance.State != GameState.Win) && Input.GetKeyDown(KeyCode.Escape))
-        {
-            GlobalMics.Instance.State = GameState.Finished;
-        }
+        //if ((GlobalMics.Instance.State != GameState.Finished && GlobalMics.Instance.State != GameState.Win) && Input.GetKeyDown(KeyCode.Escape))
+        //{
+        //    GlobalMics.Instance.State = GameState.Finished;
+        //}
 
-        if(GlobalMics.Instance.State == GameState.Win && _win && (Input.anyKeyDown || GlobalMics.Instance.Player1Yelling || GlobalMics.Instance.Player2Yelling))
-        {
-            GlobalMics.Instance.State = GameState.NotStarted;
-            SceneManager.LoadScene(1);
-        }
+        //if(GlobalMics.Instance.State == GameState.Win && _win && (Input.anyKeyDown || GlobalMics.Instance.Player1Yelling || GlobalMics.Instance.Player2Yelling))
+        //{
+        //    GlobalMics.Instance.State = GameState.NotStarted;
+        //    SceneManager.LoadScene(1);
+        //}
     }
 
     private void GameStarting()
@@ -199,7 +199,7 @@ public class TitleScreenUI : MonoBehaviour
     }
 
     private float _fadeOutTimer = 0;
-    private float _fadeOutTime = 3;
+    private float _fadeOutTime = 2;
     private IEnumerator RestartGame()
     {
         Image blackImage = GameBlack.GetComponent<Image>();
@@ -213,7 +213,7 @@ public class TitleScreenUI : MonoBehaviour
         }
         GameBlack.alpha = 1;
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
         GlobalMics.Instance.State = GameState.NotStarted;
         SceneManager.LoadScene(0);
     }
