@@ -51,6 +51,11 @@ namespace Billygoat
             _instance.SetPlayerSensitivity(id-1, level);
         }
 
+        public static string GetMicNName(int id)
+        {
+            return _instance.GetPlayerMicName(id - 1);
+        }
+
         public static bool HasMic(int id)
         {
             return _instance.PlayerHasMic(id - 1);
@@ -124,6 +129,19 @@ namespace Billygoat
             {
                 Debug.LogWarning("Trying to get microphone for player outside of range, currently setup for " + NumberOfPlayers + " players");
             }
+        }
+
+        private string GetPlayerMicName(int id)
+        {
+            if (id < NumberOfPlayers)
+            {
+                if (_players[id] != null)
+                {
+                    return _players[id].DeviceName;
+                }
+            }
+
+            return "No Mic Detected";
         }
 
         private bool PlayerHasMic(int id)
@@ -278,7 +296,12 @@ namespace Billygoat
                     if (!_micAlreadyClaimed)
                     {
                         _playerDevices[playerId] = newMic;
+
+                        _players[playerId].Stop();
                         _players[playerId] = _micDetector.GetDevice(newMic);
+                        _players[playerId].Start();
+
+
                         Log("Microphone changed: " + current + ", player " + (playerId + 1) + " reconnected to " + newMic);
                         return;
                     }
