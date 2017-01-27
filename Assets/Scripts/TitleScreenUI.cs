@@ -28,6 +28,9 @@ public class TitleScreenUI : MonoBehaviour
     private bool _finishedAndWaitingForRestart = false;
     private bool _restarting = false;
 
+    private float _inputTime = 0;
+    private const float _nextInputTime = 0.3f;
+
     private void Awake()
     {
     }
@@ -91,9 +94,24 @@ public class TitleScreenUI : MonoBehaviour
 
         if (_finishedAndWaitingForRestart && !_restarting)
         {
-            if (GlobalMics.Instance.Player1Volume > 0.8f || GlobalMics.Instance.Player2Volume > 0.8f)
+            if (GlobalMics.Instance.Player1Volume > 0.4f || GlobalMics.Instance.Player2Volume > 0.4f)
             {
-                RestartGame();
+                _inputTime += Time.unscaledDeltaTime;
+                if (LeaderboardUI.NameFinished())
+                {
+                    if (_inputTime > 0.6f)
+                    {
+                        Restart();
+                    }
+                }
+                else
+                {
+                    if (_inputTime > _nextInputTime)
+                    {
+                        _inputTime = 0;
+                        LeaderboardUI.PressA();
+                    }
+                }
             }
         }
     }
@@ -132,6 +150,8 @@ public class TitleScreenUI : MonoBehaviour
     private void GameFinished()
     {
         _finished = true;
+        //Loose?
+        GameUIAnimator.SetTrigger("Loose");
         StartCoroutine(RestartGame());
     }
 
@@ -181,12 +201,12 @@ public class TitleScreenUI : MonoBehaviour
 
     private IEnumerator WaitForWinAnimation()
     {
-        while (!TitleAnimator.GetCurrentAnimatorStateInfo(0).IsName("Winner"))
+        while (!GameUIAnimator.GetCurrentAnimatorStateInfo(0).IsName("Winner"))
         {
             yield return null;
         }
 
-        while (TitleAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.9f)
+        while (GameUIAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.5f)
         {
             yield return null;
         }

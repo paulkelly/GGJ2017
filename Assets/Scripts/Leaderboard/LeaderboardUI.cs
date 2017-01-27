@@ -40,7 +40,18 @@ public class LeaderboardUI : MonoBehaviour
         }
     }
 
+    public static bool NameFinished()
+    {
+        return _instance.NameFinishedLocal();
+    }
+
+    public static void PressA()
+    {
+        _instance.PressALocal();
+    }
+
     private const string AlphaNumRegex = "^[a-zA-Z0-9_]*$";
+    private const int NameLength = 3;
 
     private bool _hasNewHighscore = false;
     private LeaderboardEntry _editableEntry;
@@ -76,6 +87,24 @@ public class LeaderboardUI : MonoBehaviour
         }
     }
 
+    private bool NameFinishedLocal()
+    {
+        if (_hasNewHighscore)
+        {
+            return _editableEntry.Name.Length >= NameLength;
+        }
+
+        return true;
+    }
+
+    private void PressALocal()
+    {
+        if (_editableEntry.Name.Length < NameLength)
+        {
+            _editableEntry.Name += "A".ToUpper();
+        }
+    }
+
     private void Update()
     {
         if (_hasNewHighscore)
@@ -86,7 +115,7 @@ public class LeaderboardUI : MonoBehaviour
 
                 bool alphaNumericPressed = System.Text.RegularExpressions.Regex.IsMatch(pressed, AlphaNumRegex);
 
-                if (_editableEntry.Name.Length < 3)
+                if (_editableEntry.Name.Length < NameLength)
                 {
                     _editableEntry.Name += pressed.ToUpper();
                 }
