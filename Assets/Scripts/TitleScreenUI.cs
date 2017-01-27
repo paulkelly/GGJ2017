@@ -7,10 +7,6 @@ using UnityEngine.UI;
 
 public class TitleScreenUI : MonoBehaviour
 {
-    //  public CanvasGroup Main;
-    // public CanvasGroup UI;
-    //  public CanvasGroup Black;
-    //  public GameObject Win;
     public CanvasGroup TitleCanvas;
     public Animator GameUIAnimator;
     public CanvasGroup GameUICanvas;
@@ -29,6 +25,9 @@ public class TitleScreenUI : MonoBehaviour
     private float _endTimer = 0;
     private float _endWaitTime = 1f;
 
+    private bool _finishedAndWaitingForRestart = false;
+    private bool _restarting = false;
+
     private void Awake()
     {
     }
@@ -41,6 +40,11 @@ public class TitleScreenUI : MonoBehaviour
     private GameState _lastGameState = GameState.Intro;
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            GlobalMics.Instance.State = GameState.Win;
+        }
+
         if(GlobalMics.Instance.State != _lastGameState)
         {
             if (GlobalMics.Instance.State == GameState.Starting)
@@ -82,6 +86,14 @@ public class TitleScreenUI : MonoBehaviour
                 {
                     ShowOptions();
                 }
+            }
+        }
+
+        if (_finishedAndWaitingForRestart && !_restarting)
+        {
+            if (GlobalMics.Instance.Player1Volume > 0.8f || GlobalMics.Instance.Player2Volume > 0.8f)
+            {
+                StartCoroutine(RestartGame());
             }
         }
     }
@@ -126,6 +138,12 @@ public class TitleScreenUI : MonoBehaviour
     private void GameWon()
     {
         _finished = true;
+        GameUIAnimator.SetTrigger("Win");
+        StartCoroutine(WaitForWinAnimation());
+    }
+
+    public void Restart()
+    {
         StartCoroutine(RestartGame());
     }
 
@@ -159,10 +177,26 @@ public class TitleScreenUI : MonoBehaviour
         GlobalMics.Instance.State = GameState.Started;
     }
 
+    private IEnumerator WaitForWinAnimation()
+    {
+        while (!TitleAnimator.GetCurrentAnimatorStateInfo(0).IsName("Winner"))
+        {
+            yield return null;
+        }
+
+        while (TitleAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.9f)
+        {
+            yield return null;
+        }
+
+        _finishedAndWaitingForRestart = true;
+    }
+
     private float _fadeOutTimer = 0;
     private float _fadeOutTime = 2;
     private IEnumerator RestartGame()
     {
+        _restarting = true;
         Image blackImage = GameBlack.GetComponent<Image>();
         blackImage.color = new Color(blackImage.color.r, blackImage.color.g, blackImage.color.b, 1);
         GameBlack.alpha = 0;
@@ -177,11 +211,5 @@ public class TitleScreenUI : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         GlobalMics.Instance.State = GameState.NotStarted;
         SceneManager.LoadScene(0);
-    }
-
-    private IEnumerator Finish()
-    {
-        yield return new WaitForSeconds(3f);
-        _win = true;
     }
 }

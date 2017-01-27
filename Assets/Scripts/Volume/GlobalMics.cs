@@ -174,12 +174,12 @@ public class GlobalMics : MonoBehaviour
 
     public float Player1Stamina
     {
-        get { return _player1YellTimer/MaxYellTime; }
+        get { return 1 - _player1YellTimer/MaxYellTime; }
     }
 
     public float Player2Stamina
     {
-        get { return _player2YellTimer / MaxYellTime; }
+        get { return 1 - _player2YellTimer / MaxYellTime; }
     }
 
     private bool _player1YellingController = false;
