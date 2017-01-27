@@ -94,7 +94,6 @@ public class GlobalMics : MonoBehaviour
         set
         {
             _state = value;
-            //Debug.Log("StateSet: " + _state);
         }
     }
 

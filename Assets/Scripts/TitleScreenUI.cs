@@ -93,7 +93,7 @@ public class TitleScreenUI : MonoBehaviour
         {
             if (GlobalMics.Instance.Player1Volume > 0.8f || GlobalMics.Instance.Player2Volume > 0.8f)
             {
-                StartCoroutine(RestartGame());
+                RestartGame();
             }
         }
     }
@@ -139,11 +139,13 @@ public class TitleScreenUI : MonoBehaviour
     {
         _finished = true;
         GameUIAnimator.SetTrigger("Win");
+        LeaderboardUI.AddHighscore(Timer.GetTime());
         StartCoroutine(WaitForWinAnimation());
     }
 
     public void Restart()
     {
+        LeaderboardUI.Save();
         StartCoroutine(RestartGame());
     }
 
