@@ -15,6 +15,8 @@ public class ManGoat : MonoBehaviour
 
     public Transform StartTransform;
 
+    public CrashSFX Crash;
+
     public bool ManYelling;
     public bool GoatYelling;
 
@@ -268,7 +270,15 @@ public class ManGoat : MonoBehaviour
             _rigidbody.AddForceAtPosition(col.contacts[0].normal * 1000, col.contacts[0].point);
             Vector3 normal =  Quaternion.FromToRotation(Vector3.forward, Vector3.right) * col.contacts[0].normal;
             _rigidbody.AddTorque(normal * 2000);
+
+            Crash.Crash();
         }
+        else
+        {
+            Crash.Crash(col.impulse.magnitude / 2);
+        }
+
+
     }
 
     private void OnTriggerEnter(Collider col)
