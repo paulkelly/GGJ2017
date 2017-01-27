@@ -17,6 +17,7 @@ namespace Billygoat
         private bool _hasStartedPlaying;
 
         private const int SampleSize = 44100;
+        //private const int SampleSize = 1102;
 
         public bool IsPlaying
         {
@@ -42,6 +43,12 @@ namespace Billygoat
         public void StartRecording()
         {
             _isPlaying = true;
+            if (Microphone.IsRecording(_deviceName))
+            {
+                StopAllCoroutines();
+                return;
+            }
+
             _readHead = 0;
             try
             {
@@ -55,13 +62,25 @@ namespace Billygoat
             StartCoroutine(StartClip());
         }
 
-        public void StopRecording()
+        //Adding delay when switching mics for performance reasons
+        public void StopRecording(bool delayed = false)
         {
+            if (delayed)
+            {
+                StartCoroutine(StopRecordingDelayed());
+                return;
+            }
             //Debug.Log(DeviceName + " recording stopped.");
-            Microphone.End(_deviceName);
             _isPlaying = false;
             _hasStartedPlaying = false;
+            Microphone.End(_deviceName);
             _audioSource.clip = null;
+        }
+
+        private IEnumerator StopRecordingDelayed()
+        {
+            yield return new WaitForSecondsRealtime(0.3f);
+            StopRecording();
         }
 
         private void Restart()

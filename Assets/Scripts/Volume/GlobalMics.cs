@@ -14,6 +14,12 @@ public enum GameState
     Win
 }
 
+public enum ControlScheme
+{
+    SinglePlayer,
+    TwoPlayer
+}
+
 public class GlobalMics : MonoBehaviour
 {
     private static GlobalMics _instance;
@@ -131,6 +137,30 @@ public class GlobalMics : MonoBehaviour
         }
     }
 
+    private ControlScheme _controlScheme = ControlScheme.TwoPlayer;
+
+    public ControlScheme ControlScheme
+    {
+        get { return _controlScheme; }
+        set
+        {
+            _controlScheme = value;
+
+            if (_controlScheme == ControlScheme.SinglePlayer)
+            {
+                Player1.controllers.maps.SetMapsEnabled(true, "SinglePlayer");
+                Player1.controllers.maps.SetMapsEnabled(false, "MultiPlayer");
+                Player2.controllers.maps.SetMapsEnabled(false, "MultiPlayer");
+            }
+            else
+            {
+                Player1.controllers.maps.SetMapsEnabled(false, "SinglePlayer");
+                Player1.controllers.maps.SetMapsEnabled(true, "MultiPlayer");
+                Player2.controllers.maps.SetMapsEnabled(true, "MultiPlayer");
+            }
+        }
+    }
+
     private bool _player1YellingController = false;
     private bool _player2YellingController = false;
     private float _player1ControllerVolume;
@@ -144,8 +174,8 @@ public class GlobalMics : MonoBehaviour
 
         if (Time.timeScale == 0)
         {
-            bool player1Yelling = Player1.GetButton(RewiredConsts.Action.Yell);
-            bool player2Yelling = Player2.GetButton(RewiredConsts.Action.Yell);
+            bool player1Yelling = Player1.GetButton(RewiredConsts.Action.ManYell);
+            bool player2Yelling = Player1.GetButton(RewiredConsts.Action.GoatYell) || Player2.GetButton(RewiredConsts.Action.GoatYell);
 
             if (player1Yelling)
             {
@@ -190,14 +220,14 @@ public class GlobalMics : MonoBehaviour
 
         if (_player1ControllerCD)
         {
-            _player1ControllerCD = !(_player1ControllerVolume < 0.1f && Player1.GetButtonDown(RewiredConsts.Action.Yell));
+            _player1ControllerCD = !(_player1ControllerVolume < 0.1f && Player1.GetButton(RewiredConsts.Action.ManYell));
         }
         if (_player2ControllerCD)
         {
-            _player2ControllerCD = !(_player2ControllerVolume < 0.1f && Player2.GetButtonDown(RewiredConsts.Action.Yell));
+            _player2ControllerCD = !(_player2ControllerVolume < 0.1f && (Player1.GetButton(RewiredConsts.Action.GoatYell) || Player2.GetButton(RewiredConsts.Action.GoatYell)));
         }
 
-        _player1YellingController = !_player1ControllerCD && Player1.GetButton(RewiredConsts.Action.Yell);
+        _player1YellingController = !_player1ControllerCD && Player1.GetButton(RewiredConsts.Action.ManYell);
 
         if (_player1YellingController)
         {
@@ -223,7 +253,7 @@ public class GlobalMics : MonoBehaviour
             _player1YellTimer = Mathf.Clamp(_player1YellTimer - (Time.deltaTime * 3f), 0, MaxYellTime);
         }
 
-        _player2YellingController = !_player2ControllerCD && Player2.GetButton(RewiredConsts.Action.Yell);
+        _player2YellingController = !_player2ControllerCD && (Player1.GetButton(RewiredConsts.Action.GoatYell) || Player2.GetButton(RewiredConsts.Action.GoatYell));
 
         if (_player2YellingController)
         {

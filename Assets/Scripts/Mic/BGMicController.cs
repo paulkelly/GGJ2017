@@ -297,7 +297,7 @@ namespace Billygoat
                     {
                         _playerDevices[playerId] = newMic;
 
-                        _players[playerId].Stop();
+                        _players[playerId].StopAfterDelay();
                         _players[playerId] = _micDetector.GetDevice(newMic);
                         _players[playerId].Start();
 

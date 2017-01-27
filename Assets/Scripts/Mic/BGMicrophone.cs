@@ -69,5 +69,10 @@ namespace Billygoat
         {
             _source.StopRecording();
         }
+
+        public void StopAfterDelay()
+        {
+            _source.StopRecording(true);
+        }
     }
 }
