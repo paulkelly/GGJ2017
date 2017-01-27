@@ -29,7 +29,7 @@ public class TitleScreenUI : MonoBehaviour
     private bool _restarting = false;
 
     private float _inputTime = 0;
-    private const float _nextInputTime = 0.3f;
+    private const float _nextInputTime = 0.4f;
 
     private void Awake()
     {
@@ -37,6 +37,7 @@ public class TitleScreenUI : MonoBehaviour
 
     private void Start()
     {
+        GlobalMics.Instance.EnableKeyboard();
         StartCoroutine(WaitForIntro());
     }
 
@@ -113,6 +114,11 @@ public class TitleScreenUI : MonoBehaviour
                     }
                 }
             }
+
+            if (LeaderboardUI.NameFinished() && Input.anyKeyDown)
+            {
+                Restart();
+            }
         }
     }
 
@@ -159,6 +165,7 @@ public class TitleScreenUI : MonoBehaviour
     {
         _finished = true;
         GameUIAnimator.SetTrigger("Win");
+        GlobalMics.Instance.DisableKeyboard();
         LeaderboardUI.AddHighscore(Timer.GetTime());
         StartCoroutine(WaitForWinAnimation());
     }

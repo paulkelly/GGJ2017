@@ -160,6 +160,18 @@ public class GlobalMics : MonoBehaviour
         }
     }
 
+    public void EnableKeyboard()
+    {
+        Player1.controllers.maps.SetMapsEnabled(true, ControllerType.Keyboard, "Default", "Player1");
+        Player2.controllers.maps.SetMapsEnabled(true, ControllerType.Keyboard, "Default", "Player2");
+    }
+
+    public void DisableKeyboard()
+    {
+        Player1.controllers.maps.SetMapsEnabled(false, ControllerType.Keyboard, "Default", "Player1");
+        Player2.controllers.maps.SetMapsEnabled(false, ControllerType.Keyboard, "Default", "Player2");
+    }
+
     private bool _usingControllers1;
     private bool _usingControllers2;
     public bool Player1UsingController

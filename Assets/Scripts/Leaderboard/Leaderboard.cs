@@ -34,7 +34,7 @@ public class Leaderboard : MonoBehaviour
 
         if (Data.EntryList.Count > MaxEntries)
         {
-            Data.EntryList.RemoveAt(MaxEntries-1);
+            Data.EntryList.RemoveAt(MaxEntries);
         }
 
         return wasAdded;
@@ -56,7 +56,6 @@ public class Leaderboard : MonoBehaviour
     public void Save()
     {
         PlayerPrefs.SetString(PlayerprefKey, JsonUtility.ToJson(Data));
-        Debug.Log("SAVE: " + JsonUtility.ToJson(Data));
         PlayerPrefs.Save();
     }
 
@@ -64,7 +63,6 @@ public class Leaderboard : MonoBehaviour
     {
         if (PlayerPrefs.HasKey(PlayerprefKey))
         {
-            Debug.Log("LOADING");
             Data = (LeaderboardData) JsonUtility.FromJson(PlayerPrefs.GetString(PlayerprefKey), typeof(LeaderboardData));
         }
     }

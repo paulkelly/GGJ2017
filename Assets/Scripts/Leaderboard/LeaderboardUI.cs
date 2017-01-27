@@ -8,7 +8,7 @@ public class LeaderboardUI : MonoBehaviour
     public Leaderboard Leaderboard;
 
     public LeaderboardUIEntry[] LeaderboardUIEntries = new LeaderboardUIEntry[3];
-    public GameObject RankImage;
+    public CanvasGroup RankImage;
     public Text Rank;
 
     #region singleton
@@ -62,6 +62,7 @@ public class LeaderboardUI : MonoBehaviour
         _editableEntry.Time = time;
         _hasNewHighscore = Leaderboard.AddEntry(ref _editableEntry);
         _rank = Leaderboard.GetRank(ref _editableEntry);
+        //Debug.Log("Rank: " + _rank + " ==> " + _hasNewHighscore);
 
         if (_hasNewHighscore)
         {
@@ -69,7 +70,7 @@ public class LeaderboardUI : MonoBehaviour
         }
         else
         {
-            RankImage.SetActive(false);
+            RankImage.alpha = 0;
         }
 
         for (int i=0; i< LeaderboardUIEntries.Length; i++)
