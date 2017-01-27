@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Rewired;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -61,85 +62,45 @@ public class TitleScreenUI : MonoBehaviour
         }
         _lastGameState = GlobalMics.Instance.State;
 
-        //if (GlobalMics.Instance.State == GameState.NotStarted)
-        //{
+        if (GlobalMics.Instance.State == GameState.NotStarted)
+        {
+            bool pausePressed = false;
+            foreach (Player player in ReInput.players.AllPlayers)
+            {
+                pausePressed |= player.GetButtonDown(RewiredConsts.Action.Pause);
+            }
 
+            pausePressed |= ReInput.players.SystemPlayer.GetButtonDown(RewiredConsts.Action.Pause);
 
-        //    if (GlobalMics.Instance.GameStarted)
-        //    {
-        //        _started = true;
-        //        TitleScreenCamera.gameObject.SetActive(false);
-        //    }
-        //}
-        //else if (GlobalMics.Instance.State == GameState.Starting)
-        //{
-        //    Black.alpha = Mathf.Clamp01(Black.alpha + 4 * Mathf.Min(Time.deltaTime, 1f / 30f));
+            if (pausePressed)
+            {
+                if (Options)
+                {
+                    HideOptions();
+                }
+                else
+                {
+                    ShowOptions();
+                }
+            }
+        }
+    }
 
-        //    if (_blackTimer < _blackTime)
-        //    {
-        //        if (Black.alpha > 0.98f)
-        //        {
-        //            _blackTimer += Time.deltaTime;
-        //        }
-        //    }
-        //    else if (Main.alpha > 0)
-        //    {
-        //        UI.alpha = 0;
-        //        Main.alpha = Mathf.Clamp01(Main.alpha - Time.deltaTime);
-        //    }
-        //    else
-        //    {
-        //        TitleScreenCamera.gameObject.SetActive(false);
-        //        GlobalMics.Instance.HideTitleScreen();
-        //    }
-        //}
-        //else if (GlobalMics.Instance.State == GameState.Finished)
-        //{
-        //    if (!_finished)
-        //    {
-        //        _finished = true;
-        //        StartCoroutine(RestartGame());
-        //    }
+    private bool Options
+    {
+        get { return TitleAnimator.GetBool("Options"); }
 
-        //    if (_endTimer < _endWaitTime)
-        //    {
-        //        _endTimer += Time.deltaTime;
-        //    }
-        //    else
-        //    {
-        //        Main.alpha = Mathf.Clamp01(Main.alpha + Time.deltaTime);
-        //    }
-        //}
-        //else if(GlobalMics.Instance.State == GameState.Win)
-        //{
-        //    if (!_finished)
-        //    {
-        //        _finished = true;
-        //       // Win.SetActive(true);
-        //        StartCoroutine(Finish());
-        //    }
+        set { TitleAnimator.SetBool("Options", value);}
+    }
 
-        //    if (_endTimer < _endWaitTime)
-        //    {
-        //        _endTimer += Time.deltaTime;
-        //    }
-        //    else
-        //    {
-        //        _finished = true;
-        //        Main.alpha = Mathf.Clamp01(Main.alpha + Time.deltaTime);
-        //    }
-        //}
+    public void ShowOptions()
+    {
+        Options = true;
+    }
 
-        //if ((GlobalMics.Instance.State != GameState.Finished && GlobalMics.Instance.State != GameState.Win) && Input.GetKeyDown(KeyCode.Escape))
-        //{
-        //    GlobalMics.Instance.State = GameState.Finished;
-        //}
-
-        //if(GlobalMics.Instance.State == GameState.Win && _win && (Input.anyKeyDown || GlobalMics.Instance.Player1Yelling || GlobalMics.Instance.Player2Yelling))
-        //{
-        //    GlobalMics.Instance.State = GameState.NotStarted;
-        //    SceneManager.LoadScene(1);
-        //}
+    public void HideOptions()
+    {
+        Options = false;
     }
 
     private void GameStarting()

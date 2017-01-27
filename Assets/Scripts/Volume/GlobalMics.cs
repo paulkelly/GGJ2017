@@ -161,6 +161,27 @@ public class GlobalMics : MonoBehaviour
         }
     }
 
+    private bool _usingControllers1;
+    private bool _usingControllers2;
+    public bool Player1UsingController
+    {
+        get { return _usingControllers1; }
+    }
+    public bool Player2UsingController
+    {
+        get { return _usingControllers2; }
+    }
+
+    public float Player1Stamina
+    {
+        get { return _player1YellTimer/MaxYellTime; }
+    }
+
+    public float Player2Stamina
+    {
+        get { return _player2YellTimer / MaxYellTime; }
+    }
+
     private bool _player1YellingController = false;
     private bool _player2YellingController = false;
     private float _player1ControllerVolume;
@@ -286,19 +307,35 @@ public class GlobalMics : MonoBehaviour
         if (_player1ControllerVolume > player1MicVolume)
         {
             _player1Yelling = _player1YellingController;
+            if (_player1Volume > 0.1)
+            {
+                _usingControllers1 = true;
+            }
         }
         else
         {
             _player1Yelling = _player1Volume > MicThreshold;
+            if (_player1Volume > 0.1)
+            {
+                _usingControllers1 = false;
+            }
         }
 
         if (_player2ControllerVolume > player2MicVolume)
         {
             _player2Yelling = _player2YellingController;
+            if (_player2Volume > 0.1)
+            {
+                _usingControllers2 = true;
+            }
         }
         else
         {
             _player2Yelling = _player2Volume > MicThreshold;
+            if (_player2Volume > 0.1)
+            {
+                _usingControllers2 = false;
+            }
         }
     }
 }
