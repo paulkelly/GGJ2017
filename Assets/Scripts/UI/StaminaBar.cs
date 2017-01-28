@@ -10,8 +10,8 @@ public class StaminaBar : MonoBehaviour
     private bool _enabled;
     public RectTransform _transform;
     public CanvasGroup CanvasGroup;
-    private float _alphaTarget = 1;
-    private float _startValue = 1;
+    private float _alphaTarget = 0;
+    private float _startValue = 0;
     private float _lerpTime;
     private readonly float _maxLerpTime = 0.3f;
 
