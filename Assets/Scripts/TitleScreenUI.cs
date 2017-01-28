@@ -44,10 +44,10 @@ public class TitleScreenUI : MonoBehaviour
     private GameState _lastGameState = GameState.Intro;
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            GlobalMics.Instance.State = GameState.Win;
-        }
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    GlobalMics.Instance.State = GameState.Win;
+        //}
 
         if (GlobalMics.Instance.State != _lastGameState)
         {
