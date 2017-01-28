@@ -106,6 +106,10 @@ public class LeaderboardUI : MonoBehaviour
         }
     }
 
+    private bool _showUnderscore = false;
+    private float _underscoreTimer = 0;
+    private const float UnderscoreOn = 0.3f;
+    private const float UnderscoreOff = 0.1f;
     private void Update()
     {
         if (_hasNewHighscore)
@@ -116,19 +120,65 @@ public class LeaderboardUI : MonoBehaviour
 
                 bool alphaNumericPressed = System.Text.RegularExpressions.Regex.IsMatch(pressed, AlphaNumRegex);
 
-                if (_editableEntry.Name.Length < NameLength)
+                if (alphaNumericPressed)
                 {
-                    _editableEntry.Name += pressed.ToUpper();
+                    if (_editableEntry.Name.Length < NameLength)
+                    {
+                        _editableEntry.Name += pressed.ToUpper();
+                    }
+                }
+            }
+
+            if (!NameFinishedLocal())
+            {
+                _underscoreTimer += Time.unscaledDeltaTime;
+
+                if (_showUnderscore)
+                {
+                    if (_underscoreTimer > UnderscoreOn)
+                    {
+                        _showUnderscore = false;
+                        _underscoreTimer = 0;
+                    }
+                }
+                else
+                {
+                    if (_underscoreTimer > UnderscoreOff)
+                    {
+                        _showUnderscore = true;
+                        _underscoreTimer = 0;
+                    }
                 }
             }
 
             if (string.IsNullOrEmpty(_editableEntry.Name))
             {
-                LeaderboardUIEntries[_rank - 1].Name.text = "_";
+                if (_showUnderscore)
+                {
+                    LeaderboardUIEntries[_rank - 1].Name.text = "_";
+                }
+                else
+                {
+                    LeaderboardUIEntries[_rank - 1].Name.text = "";
+                }
             }
             else
             {
-                LeaderboardUIEntries[_rank - 1].Name.text = _editableEntry.Name;
+                if (NameFinishedLocal())
+                {
+                    LeaderboardUIEntries[_rank - 1].Name.text = _editableEntry.Name;
+                }
+                else
+                {
+                    if (_showUnderscore)
+                    {
+                        LeaderboardUIEntries[_rank - 1].Name.text = _editableEntry.Name + "_";
+                    }
+                    else
+                    {
+                        LeaderboardUIEntries[_rank - 1].Name.text = _editableEntry.Name;
+                    }
+                }
             }
         }
     }
